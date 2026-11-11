@@ -208,6 +208,30 @@ def sdo(t, key, **kw):
     o.update({k:v for k,v in kw.items() if v not in (None,[],"")})
     return o
 
+# ---------- AI-CTI scope category (the project's first custom STIX 2.1 extension) ----------
+# Category A = threat actor USING AI to attack (MITRE ATT&CK); B = threat actor ATTACKING an AI system
+# (MITRE ATLAS). Carried THREE ways for consistency + portability: a declared top-level property
+# `ai_cti_category` (via a STIX 2.1 extension-definition), a standard label mirror (survives consumers
+# that drop unknown extensions, e.g. some OpenCTI imports), and — for attack-patterns — the ATT&CK vs
+# ATLAS external_reference that already distinguishes them.
+PROJECT_IDENTITY_ID = sid("identity", "project:owasp-genai-threat-intel")
+CATEGORY_EXT_ID = sid("extension-definition", "ai-cti-category")
+CAT_PROP = "ai_cti_category"
+CAT_LABEL = {"A": "owasp-genai-category-a", "B": "owasp-genai-category-b"}
+CATEGORY_SCHEMA_URL = ("https://github.com/GenAI-Security-Project/GenAI-Threat-Intelligence-Initiative"
+                       "/blob/main/stix/EXTENSION.md")
+
+def stamp_category(obj, cats):
+    """Tag an SDO with its AI-CTI scope category/categories (A and/or B): the declared top-level
+    property, the standard label mirror, and the extension-definition reference. Idempotent."""
+    cl = sorted(cats)
+    if not cl: return
+    obj[CAT_PROP] = cl
+    labels = obj.setdefault("labels", [])
+    for c in cl:
+        if CAT_LABEL[c] not in labels: labels.append(CAT_LABEL[c])
+    obj.setdefault("extensions", {})[CATEGORY_EXT_ID] = {"extension_type": "toplevel-property-extension"}
+
 # ---------- IOCs / indicators (from iocs/*.csv) ----------
 def refang(v):
     """Undo common defanging so the value is a real observable. No-op if nothing to undo."""
@@ -283,7 +307,8 @@ def ioc_pattern_and_sco(ioc_type, value, platform):
 
 def build_stix(recs, appendix):
     objs = {}   # id -> obj (dedup)
-    reports = {}  # url -> {name, org, created, refs:set}  (a report can cover many actors)
+    reports = {}  # url -> {name, org, created, refs:set, cats:set}  (a report can cover many actors)
+    cat_by_id = {}  # obj id -> set of AI-CTI categories ("A"/"B"); stamped onto SDOs at the end
     def add(o): objs.setdefault(o["id"], o)
     rels = {}
     def rel(src, tgt, rtype):
@@ -293,6 +318,7 @@ def build_stix(recs, appendix):
     gtg_index = {}   # 'GTG-####' -> intrusion-set id, for linking indicators to actors
     for r in recs:
         created = reported_iso(r["reported"])
+        cat = "B" if r["table"] == "catB" else "A"   # A = uses AI (ATT&CK); B = attacks AI (ATLAS)
         fs, ls = first_last(r["activity"])
         aliases = [a.strip() for a in re.split(r"[,/]", r["akas"]) if a.strip() and a.strip().lower() not in ("unknown","n/a")]
         exts = []
@@ -309,6 +335,7 @@ def build_stix(recs, appendix):
         if exts: iset["external_references"] = exts
         if r["table"] == "deepfake": iset.setdefault("labels", []).append("deepfake")
         add(iset)
+        cat_by_id.setdefault(is_id, set()).add(cat)
         for g in re.findall(r"GTG-\d+", " ".join([r["name"], r["akas"], r["brief"]])):
             gtg_index.setdefault(g, is_id)   # first mention (usually the row name) wins
         # attack-patterns
@@ -319,6 +346,7 @@ def build_stix(recs, appendix):
                          description=appendix.get(lbl.lower(), "Custom LLM-themed TTP (see Appendix A)."))
                 ap["x_llm_ttp"] = True
                 add(ap); ap_ids.append(ap["id"])
+                cat_by_id.setdefault(ap["id"], set()).add("A")   # LLM-TTP labels are Category A
             for mid in chunk["mitre"]:
                 nm = chunk["names"].get(mid, mid)
                 if mid.startswith("AML."):          # MITRE ATLAS (Category B)
@@ -330,6 +358,7 @@ def build_stix(recs, appendix):
                              external_references=[{"source_name":"mitre-attack","external_id":mid,
                                  "url":f"https://attack.mitre.org/techniques/{mid.replace('.', '/')}/"}])
                 add(ap); ap_ids.append(ap["id"])
+                cat_by_id.setdefault(ap["id"], set()).add("B" if mid.startswith("AML.") else "A")
         for ap in sorted(set(ap_ids)): rel(is_id, ap, "uses")
         # malware
         mw_ids = []
@@ -341,16 +370,19 @@ def build_stix(recs, appendix):
         # accumulate reports per source URL (one report may cover many actors)
         for text, url in r["links"]:
             if not url or not url.startswith("http"): continue
-            rp = reports.setdefault(url, {"name":"","org":org_for(url),"created":created,"refs":set()})
+            rp = reports.setdefault(url, {"name":"","org":org_for(url),"created":created,"refs":set(),"cats":set()})
             if text and (not rp["name"] or len(text) > len(rp["name"])): rp["name"] = text
             rp["refs"].update([is_id] + ap_ids + mw_ids)
+            rp["cats"].add(cat)
             if created < rp["created"]: rp["created"] = created
     # emit reports + identities
     for url, rp in reports.items():
         ident = sdo("identity", "org:"+rp["org"], name=rp["org"], identity_class="organization"); add(ident)
-        add({"type":"report","spec_version":"2.1","id":sid("report","rpt:"+url),"created":rp["created"],"modified":rp["created"],
+        rid = sid("report","rpt:"+url)
+        add({"type":"report","spec_version":"2.1","id":rid,"created":rp["created"],"modified":rp["created"],
              "name":(rp["name"] or f"Report ({rp['org']})")[:200],"published":rp["created"],"created_by_ref":ident["id"],
              "object_refs":sorted(rp["refs"]),"external_references":[{"source_name":rp["org"],"url":url}]})
+        cat_by_id.setdefault(rid, set()).update(rp["cats"] or {"A"})
     # indicators from iocs/*.csv (one file per report). Emit a property ONLY when its CSV cell
     # is non-empty — never guess or back-fill. Link to an actor only on a real GTG match.
     ioc_stats = {"files": [], "total": 0, "linked": 0, "unlinked": 0, "no_clean_pattern": 0,
@@ -399,7 +431,22 @@ def build_stix(recs, appendix):
             else:
                 ioc_stats["unlinked"] += 1
                 if g("gtg"): ioc_stats["unlinked_gtg"][g("gtg")] = ioc_stats["unlinked_gtg"].get(g("gtg"), 0) + 1
+            icats = (cat_by_id.get(isid) if isid else None) or {"A"}   # inherit linked actor's category; the IOC feed is Category A
+            cat_by_id.setdefault(ind_id, set()).update(icats)
         ioc_stats["files"].append(fstat)
+    # stamp each category-bearing SDO once (intrusion-set / attack-pattern / report / indicator)
+    for oid, cats in cat_by_id.items():
+        if oid in objs: stamp_category(objs[oid], cats)
+    # the project identity + the category extension-definition (declares the ai_cti_category property)
+    add({"type":"identity","spec_version":"2.1","id":PROJECT_IDENTITY_ID,"created":EPOCH,"modified":EPOCH,
+         "name":"OWASP GenAI Security Project - Threat Intelligence Initiative","identity_class":"organization"})
+    add({"type":"extension-definition","spec_version":"2.1","id":CATEGORY_EXT_ID,"created":EPOCH,"modified":EPOCH,
+         "created_by_ref":PROJECT_IDENTITY_ID,"name":"OWASP GenAI AI-CTI Category","version":"1.0.0",
+         "description":("AI-CTI scope category. A = threat actor USING AI to attack (MITRE ATT&CK); "
+                        "B = threat actor ATTACKING an AI/ML/LLM system (MITRE ATLAS). Carried as the "
+                        "top-level 'ai_cti_category' property (list of 'A'/'B') and mirrored as the "
+                        "'owasp-genai-category-a'/'-b' labels."),
+         "schema":CATEGORY_SCHEMA_URL,"extension_types":["toplevel-property-extension"]})
     allobjs = list(objs.values()) + list(rels.values())
     allobjs.sort(key=lambda o: (o["type"], o["id"]))
     return {"type":"bundle","id":sid("bundle","threat-actors-ai"),"objects":allobjs}, ioc_stats
