@@ -12,6 +12,14 @@ Learn more on the [OWASP GenAI initiative page](https://genai.owasp.org/initiati
 > STIX/TAXII feed described below are in active development. Expect this repo to change rapidly.
 > Contributions and reviewers welcome.
 
+**📊 Live now:** the existing Category A corpus — **158 tracked threat actors / UnSubs** mapped to
+TTPs — has been migrated into this repo: **[tracker table](TRACKER.md)** ·
+**[STIX 2.1 bundle](stix/threat-actors-ai-stix2.1.json)** · **[JSON](tracker.json)** ·
+**[IOC feeds](iocs/)**. The interactive, searchable site publishes to
+`https://genai-security-project.github.io/GenAI-Threat-Intelligence-Initiative/` once GitHub Pages is
+enabled. All exports regenerate automatically from `TRACKER.md` on every change
+(see [`tools/build_exports.py`](tools/build_exports.py)).
+
 ---
 
 ## What this is
@@ -74,8 +82,8 @@ authoritative sources rather than duplicating them, and maintain vendor/product 
 
 | Phase | What | Status |
 |---|---|---|
-| 0 | Foundations: OWASP repo, schema, migrate existing catalog | 🔨 In progress |
-| 1 | Publish existing corpus: website + STIX/TAXII feed | ⬜ Planned |
+| 0 | Foundations: OWASP repo, schema, migrate existing catalog | ✅ Catalog migrated |
+| 1 | Publish existing corpus: website + STIX/TAXII feed | 🔨 In progress |
 | 2 | AI collection pipeline + spend caps | ⬜ Planned |
 | 3 | Review dashboard + notifications | ⬜ Planned |
 | 4 | Agentic-AI incidents data exchange | ⬜ Planned |
