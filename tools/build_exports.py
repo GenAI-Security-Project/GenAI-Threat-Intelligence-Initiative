@@ -1,0 +1,497 @@
+#!/usr/bin/env python3
+"""
+build_exports.py — regenerate the derived artifacts from README.MD (the source of truth).
+
+Parses the main threat-actor table + the deepfake table (+ Appendix A TTP definitions),
+plus any IOC CSVs under iocs/ (one file per report, schema in iocs/README.md), and emits:
+  - index.html                              interactive, searchable Pages homepage
+  - tracker.json                            structured data (machine-readable)
+  - stix/threat-actors-ai-stix2.1.json      complete STIX 2.1 bundle (actors + indicators)
+
+The iocs/*.csv files add STIX 2.1 `indicator` objects (+ observable SCOs and `indicates`
+relationships to the matching intrusion-set). Fields are emitted ONLY when the CSV cell is
+non-empty — the builder never guesses or back-fills an indicator field it wasn't given.
+
+Deterministic + idempotent: UUIDv5 IDs and content-derived stable timestamps (never now()),
+stdlib only. Run from the repo root:  python tools/build_exports.py
+"""
+import json, re, sys, uuid, hashlib, csv, calendar
+from pathlib import Path
+
+ROOT = Path(".")
+DATA_MD = "TRACKER.md"  # canonical data source (tracker tables + Appendix A)
+NS = uuid.UUID("6d8b7e2a-1c4f-5a9d-b3e6-0f2a7c9d4e11")  # fixed namespace for stable IDs
+EPOCH = "2024-01-01T00:00:00.000Z"
+MON = {m[:3]: i+1 for i, m in enumerate(
+    ["January","February","March","April","May","June","July","August","September","October","November","December"])}
+
+# ---------- parsing ----------
+def read(p): return (ROOT / p).read_text(encoding="utf-8")
+
+def parse_table(lines, header_startswith, ncols):
+    hdr = next(i for i, l in enumerate(lines) if l.startswith(header_startswith))
+    rows = []
+    i = hdr + 2
+    while i < len(lines) and lines[i].startswith("|"):
+        cells = [c.strip() for c in lines[i].split("|")[1:-1]]
+        if len(cells) >= ncols and cells[0]:
+            rows.append(cells[:ncols])
+        i += 1
+    return rows
+
+def clean(s):
+    s = re.sub(r"<br\s*/?>", " ", s)
+    s = re.sub(r"\*\*(.+?)\*\*", r"\1", s)
+    s = re.sub(r"\[([^\]]+)\]\((https?://[^)]+)\)", r"\1", s)  # md link -> text
+    return re.sub(r"\s+", " ", s).strip()
+
+def urls_in(s): return re.findall(r"https?://[^\s\)\]]+", s)
+
+def md_links(s): return re.findall(r"\[([^\]]+)\]\((https?://[^)]+)\)", s)
+
+def parse_ttp(cell):
+    """Return list of {label, mitre:[ids], text} per <br><br> chunk."""
+    out = []
+    for chunk in re.split(r"<br\s*/?>\s*<br\s*/?>", cell):
+        chunk = chunk.strip()
+        if not chunk: continue
+        labels = re.findall(r"\*\*(.+?)\*\*", chunk)
+        ids = re.findall(r"\b(T\d{4}(?:\.\d{3})?|TA\d{4})\b", chunk)
+        # technique name: text after the id up to <br> or end
+        names = {}
+        for m in re.finditer(r"\b(T\d{4}(?:\.\d{3})?|TA\d{4})\b\s*-\s*([^<|]+)", chunk):
+            names[m.group(1)] = m.group(2).strip().rstrip(".")
+        out.append({"labels": [clean(x) for x in labels], "mitre": ids, "names": names})
+    return out
+
+def parse_appendix(text):
+    defs = {}
+    m = re.search(r"## Appendix A", text)
+    if not m: return defs
+    seg = text[m.start():]
+    seg = seg.split("# !!!")[0]
+    for mm in re.finditer(r"\*\*(.+?)[:\*]{1,3}\s*(.+?)(?:\(CREDIT[^)]*\))?\s*(?:\n|$)", seg):
+        label = clean(mm.group(1)); body = clean(mm.group(2))
+        if label and body: defs[label.lower()] = body[:600]
+    return defs
+
+DOMAIN_ORG = {
+    "anthropic.com":"Anthropic","openai.com":"OpenAI","cloud.google.com":"Google Threat Intelligence Group",
+    "blog.google":"Google","microsoft.com":"Microsoft","sysdig.com":"Sysdig","crowdstrike.com":"CrowdStrike",
+    "welivesecurity.com":"ESET","eset.com":"ESET","securelist.com":"Kaspersky","sentinelone.com":"SentinelOne",
+    "proofpoint.com":"Proofpoint","checkpoint.com":"Check Point","research.checkpoint.com":"Check Point Research",
+    "huntress.com":"Huntress","unit42.paloaltonetworks.com":"Palo Alto Networks Unit 42","paloaltonetworks.com":"Palo Alto Networks",
+    "mandiant.com":"Mandiant","ncsc.gov.uk":"NCSC UK","ic3.gov":"FBI IC3","fbi.gov":"FBI","recordedfuture.com":"Recorded Future",
+    "hunt.io":"Hunt.io","sygnia.co":"Sygnia","theregister.com":"The Register","thehackernews.com":"The Hacker News",
+    "resecurity.com":"Resecurity","jfrog.com":"JFrog","symantec-enterprise-blogs.security.com":"Symantec","security.com":"Symantec",
+    "trendmicro.com":"Trend Micro","scmp.com":"South China Morning Post","wsj.com":"Wall Street Journal",
+    "infosecurity-magazine.com":"Infosecurity Magazine","state.gov":"US Dept of State","cnbc.com":"CNBC",
+    "aws.amazon.com":"Amazon","mp.weixin.qq.com":"WeChat (Chinese vendor)",
+}
+def org_for(url):
+    m = re.match(r"https?://([^/]+)/?", url or "")
+    host = (m.group(1) if m else "").lower().lstrip("www.")
+    for d, o in DOMAIN_ORG.items():
+        if d in host: return o
+    return host or "Unknown source"
+
+MALWARE = ["PROMPTSTEAL","LameHug","JADEPUFFER","TuxBot v3","TuxBot","QUIETVAULT","PROMPTFLUX","PROMPTSPY","BusySnake",
+           "VenomRAT","CANFAIL","LONGSTREAM","BIGMACHO","Funklocker","OSSTUN","COINBAIT","Rhadamanthys","zgRAT","DOILoader",
+           "SparkCat","Win32/Wkysol","NetSupport","LokiBot","ModiLoader","DBatLoader","CleanUpLoader","Dunihi","AsyncRAT"]
+
+def first_last(span):
+    """'Mon YYYY – Mon YYYY' / 'Mon YYYY' -> (first_iso, last_iso) or (None,None)."""
+    if not span or span.lower() == "unknown": return None, None
+    def ym(tok):
+        tok = tok.strip()
+        m = re.search(r"([A-Z][a-z]{2})\s+(\d{4})", tok)
+        if m: return int(m.group(2)), MON.get(m.group(1))
+        m = re.search(r"\b(\d{4})\b", tok)
+        if m: return int(m.group(1)), 1
+        return None
+    parts = re.split(r"\s*[–-]\s*", span)
+    a = ym(parts[0]); b = ym(parts[-1]) if len(parts) > 1 else a
+    def iso(v, end=False):
+        if not v: return None
+        y, mo = v; mo = mo or (12 if end else 1)
+        return f"{y:04d}-{mo:02d}-01T00:00:00.000Z"
+    return iso(a, False), iso(b, True)
+
+def reported_iso(rep):
+    if not rep or rep.lower() == "unknown": return EPOCH
+    m = re.search(r"([A-Z][a-z]{2})\s+(\d{4})", rep)
+    if m: return f"{int(m.group(2)):04d}-{MON.get(m.group(1),1):02d}-01T00:00:00.000Z"
+    m = re.search(r"\b(\d{4})\b", rep)
+    return f"{int(m.group(1)):04d}-01-01T00:00:00.000Z" if m else EPOCH
+
+_SEASON = {"summer": 6, "mid": 7}
+_MONTH_TOK = (r"(?:(?P<d1>\d{1,2})\s+)?(?P<mon>Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?"
+              r"(?:\s+\d{1,2}(?:\s*[–-]\s*\d{1,2})?(?=\s*(?:,|[–-]|$|;)))?(?:,?\s+(?P<yr>\d{4}))?")
+_TOK = re.compile(r"\bQ(?P<q>[1-4])\s+(?P<qy>\d{4})|\b(?P<sea>[Ss]ummer|[Mm]id)\s+(?P<sy>\d{4})|" + _MONTH_TOK + r"|\b(?P<by>\d{4})\b")
+
+def _min_ym(s):
+    """Earliest YYYYMM integer in a date cell, or None.
+    Parenthetical notes are ignored ("Nov 2025 (updated Sep 2026)" -> Nov 2025). Understands 'Mon YYYY',
+    '31 Aug 2026', 'Jul 1-4, 2026', 'Apr 8 - May 21, 2026' (month with no year borrows the next year),
+    'Q4 2025', 'Summer/Mid YYYY', and bare YYYY (-> January)."""
+    s = re.sub(r"\([^)]*\)", "", s or "")
+    toks = []
+    for m in _TOK.finditer(s):
+        if m.group("q"): toks.append(("ym", int(m.group("qy")), 3 * (int(m.group("q")) - 1) + 1)); continue
+        if m.group("sea"): toks.append(("ym", int(m.group("sy")), _SEASON[m.group("sea").lower()])); continue
+        if m.group("by"): toks.append(("ym", int(m.group("by")), 1)); continue
+        mo = MON.get(m.group("mon"))
+        if mo: toks.append(("ym", int(m.group("yr")), mo) if m.group("yr") else ("m", None, mo))
+    keys, pending = [], []
+    for kind, y, mo in toks:
+        if kind == "m": pending.append(mo); continue
+        keys += [y * 100 + pm for pm in pending]; pending = []
+        keys.append(y * 100 + mo)
+    # a bare year directly after a month token was already consumed with it; drop Jan placeholders it shadows
+    months_with_year = {k // 100 for k in keys if k % 100 != 1}
+    keys = [k for k in keys if not (k % 100 == 1 and k // 100 in months_with_year and _only_bare(s, k // 100))]
+    return min(keys) if keys else None
+
+def _only_bare(s, y):
+    """True if year y appears in s only as a bare year (never attached to a month name)."""
+    return not re.search(r"[A-Z][a-z]{2}[a-z]*\.?[^;\n]*?\b%d\b" % y, s)
+
+def date_key(v):
+    """Numeric sort key (YYYYMM) for a date/range cell; None for Unknown/empty (sorts last).
+    A cell that starts with 'Unknown' stays Unknown even if its note mentions dates."""
+    if not v or re.match(r"\s*unknown\b", v, re.I): return None
+    return _min_ym(v)
+
+# ---------- build structured records ----------
+def build_records():
+    txt = read(DATA_MD); lines = txt.split("\n")
+    appendix = parse_appendix(txt)
+    main = parse_table(lines, "| Name", 7)
+    deep = parse_table(lines, "| Year and Month", 7)
+    recs = []
+    for c in main:
+        name, akas, brief, ttp, link, rep, act = c
+        recs.append({"table":"main","name":clean(name),"akas":clean(akas),"brief_md":brief,"brief":clean(brief),
+                     "ttp_md":ttp,"ttp":parse_ttp(ttp),"links":md_links(brief)+md_links(link)+[("",u) for u in urls_in(link)],
+                     "reported":rep,"activity":act})
+    for c in deep:
+        ym, actor, victim, brief, ttp, link, rep = c
+        recs.append({"table":"deepfake","name":clean(actor) or "UnSub","akas":"","victim":clean(victim),"brief_md":brief,
+                     "brief":clean(brief),"ttp_md":ttp,"ttp":parse_ttp(ttp),
+                     "links":md_links(brief)+md_links(link)+[("",u) for u in urls_in(link)],
+                     "reported":rep,"activity":ym})
+    return recs, appendix
+
+# ---------- STIX ----------
+def sid(t, key): return f"{t}--{uuid.uuid5(NS, t+':'+key)}"
+def sdo(t, key, **kw):
+    o = {"type":t,"spec_version":"2.1","id":sid(t,key),"created":kw.pop("created",EPOCH),
+         "modified":kw.pop("modified",kw.get("created",EPOCH) if False else None) or EPOCH}
+    o.update({k:v for k,v in kw.items() if v not in (None,[],"")})
+    return o
+
+# ---------- IOCs / indicators (from iocs/*.csv) ----------
+def refang(v):
+    """Undo common defanging so the value is a real observable. No-op if nothing to undo."""
+    if not v: return v
+    s = v.strip()
+    s = re.sub(r"^h(?:xx|XX)ps?", lambda m: "https" if m.group(0)[-1] in "sS" else "http", s)
+    s = (s.replace("[.]", ".").replace("(.)", ".").replace("{.}", ".").replace("[dot]", ".").replace("(dot)", ".")
+          .replace("[:]", ":").replace("[at]", "@").replace("(at)", "@"))
+    return s
+
+def _stix_str(v):
+    """Escape a value for a single-quoted STIX pattern string literal."""
+    return v.replace("\\", "\\\\").replace("'", "\\'")
+
+def _ioc_date_iso(s, end=False):
+    """ISO date cell ('YYYY-MM-DD' | 'YYYY-MM' | 'YYYY') -> STIX timestamp, or None. Never guesses.
+    end=True resolves to the last moment of the stated day/month/year, so a same-day first_seen/
+    last_seen yields valid_until strictly greater than valid_from (STIX requirement)."""
+    s = (s or "").strip()
+    T = "23:59:59.999Z" if end else "00:00:00.000Z"
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})$", s)
+    if m: return f"{m.group(1)}-{m.group(2)}-{m.group(3)}T{T}"
+    m = re.match(r"^(\d{4})-(\d{2})$", s)
+    if m:
+        y, mo = int(m.group(1)), int(m.group(2))
+        d = calendar.monthrange(y, mo)[1] if end else 1
+        return f"{y:04d}-{mo:02d}-{d:02d}T{T}"
+    m = re.match(r"^(\d{4})$", s)
+    if m: return (f"{m.group(1)}-12-31T{T}" if end else f"{m.group(1)}-01-01T{T}")
+    return None
+
+def _sco(scotype, **props):
+    """Deterministic STIX SCO (UUIDv5 over its defining properties)."""
+    key = scotype + ":" + "|".join(f"{k}={props[k]!r}" for k in sorted(props))
+    o = {"type": scotype, "spec_version": "2.1", "id": sid(scotype, key)}
+    o.update(props)
+    return o
+
+def ioc_pattern_and_sco(ioc_type, value, platform):
+    """(pattern, sco, x_extra) for a refanged value. Unknown type -> (None, None, {}); the
+    caller still emits an indicator (with x_ioc_type preserving the raw type) — no detail is lost."""
+    t = (ioc_type or "").lower()
+    v = refang(value)
+    e = _stix_str(v)
+    if t in ("domain", "hostname"):
+        return f"[domain-name:value = '{e}']", _sco("domain-name", value=v), {}
+    if t == "ipv4":
+        return f"[ipv4-addr:value = '{e}']", _sco("ipv4-addr", value=v), {}
+    if t == "ipv6":
+        return f"[ipv6-addr:value = '{e}']", _sco("ipv6-addr", value=v), {}
+    if t in ("url", "onion"):
+        return f"[url:value = '{e}']", _sco("url", value=v), {}
+    if t == "email":
+        return f"[email-addr:value = '{e}']", _sco("email-addr", value=v), {}
+    if t == "sha256":
+        return f"[file:hashes.'SHA-256' = '{e}']", _sco("file", hashes={"SHA-256": v}), {}
+    if t in ("filename", "filepath"):
+        return f"[file:name = '{e}']", _sco("file", name=v), {}
+    if t in ("android_package", "app_id"):
+        return f"[software:name = '{e}']", _sco("software", name=v), {}
+    if t in ("account", "telegram_user_id", "telegram_bot_id", "telegram_chat_id"):
+        if t == "account" and v.lower().startswith(("http://", "https://")):
+            return f"[url:value = '{e}']", _sco("url", value=v), {}
+        acct = "telegram" if t.startswith("telegram") else (platform or "").strip().lower()
+        x = {"x_telegram_id_kind": t} if t.startswith("telegram") else {}
+        if acct:
+            return (f"[user-account:account_type = '{_stix_str(acct)}' AND user-account:user_id = '{e}']",
+                    _sco("user-account", account_type=acct, user_id=v), x)
+        return f"[user-account:user_id = '{e}']", _sco("user-account", user_id=v), x
+    if t == "scheduled_task":
+        return f"[process:name = '{e}']", None, {}
+    return None, None, {}
+
+def build_stix(recs, appendix):
+    objs = {}   # id -> obj (dedup)
+    reports = {}  # url -> {name, org, created, refs:set}  (a report can cover many actors)
+    def add(o): objs.setdefault(o["id"], o)
+    rels = {}
+    def rel(src, tgt, rtype):
+        rid = sid("relationship", f"{rtype}:{src}:{tgt}")
+        rels.setdefault(rid, {"type":"relationship","spec_version":"2.1","id":rid,"created":EPOCH,"modified":EPOCH,
+                              "relationship_type":rtype,"source_ref":src,"target_ref":tgt})
+    gtg_index = {}   # 'GTG-####' -> intrusion-set id, for linking indicators to actors
+    for r in recs:
+        created = reported_iso(r["reported"])
+        fs, ls = first_last(r["activity"])
+        aliases = [a.strip() for a in re.split(r"[,/]", r["akas"]) if a.strip() and a.strip().lower() not in ("unknown","n/a")]
+        exts = []
+        seen_u = set()
+        for text, url in r["links"]:
+            if url and url not in seen_u and url.startswith("http"):
+                seen_u.add(url); exts.append({"source_name":org_for(url),"url":url,**({"description":text} if text else {})})
+        is_id = sid("intrusion-set", r["name"])
+        iset = {"type":"intrusion-set","spec_version":"2.1","id":is_id,"created":created,"modified":created,
+                "name":r["name"],"description":r["brief"][:1500]}
+        if aliases: iset["aliases"] = aliases
+        if fs: iset["first_seen"] = fs
+        if ls: iset["last_seen"] = ls
+        if exts: iset["external_references"] = exts
+        if r["table"] == "deepfake": iset.setdefault("labels", []).append("deepfake")
+        add(iset)
+        for g in re.findall(r"GTG-\d+", " ".join([r["name"], r["akas"], r["brief"]])):
+            gtg_index.setdefault(g, is_id)   # first mention (usually the row name) wins
+        # attack-patterns
+        ap_ids = []
+        for chunk in r["ttp"]:
+            for lbl in chunk["labels"]:
+                ap = sdo("attack-pattern", "llm:"+lbl.lower(), name=lbl,
+                         description=appendix.get(lbl.lower(), "Custom LLM-themed TTP (see Appendix A)."))
+                ap["x_llm_ttp"] = True
+                add(ap); ap_ids.append(ap["id"])
+            for mid in chunk["mitre"]:
+                nm = chunk["names"].get(mid, mid)
+                ap = sdo("attack-pattern", "mitre:"+mid, name=nm,
+                         external_references=[{"source_name":"mitre-attack","external_id":mid,
+                             "url":f"https://attack.mitre.org/techniques/{mid.replace('.', '/')}/"}])
+                add(ap); ap_ids.append(ap["id"])
+        for ap in sorted(set(ap_ids)): rel(is_id, ap, "uses")
+        # malware
+        mw_ids = []
+        for fam in MALWARE:
+            if re.search(r"\b"+re.escape(fam)+r"\b", r["brief_md"], re.I):
+                mw = sdo("malware", fam.lower(), name=fam, is_family=True)
+                add(mw); mw_ids.append(mw["id"])
+        for mw in sorted(set(mw_ids)): rel(is_id, mw, "uses")
+        # accumulate reports per source URL (one report may cover many actors)
+        for text, url in r["links"]:
+            if not url or not url.startswith("http"): continue
+            rp = reports.setdefault(url, {"name":"","org":org_for(url),"created":created,"refs":set()})
+            if text and (not rp["name"] or len(text) > len(rp["name"])): rp["name"] = text
+            rp["refs"].update([is_id] + ap_ids + mw_ids)
+            if created < rp["created"]: rp["created"] = created
+    # emit reports + identities
+    for url, rp in reports.items():
+        ident = sdo("identity", "org:"+rp["org"], name=rp["org"], identity_class="organization"); add(ident)
+        add({"type":"report","spec_version":"2.1","id":sid("report","rpt:"+url),"created":rp["created"],"modified":rp["created"],
+             "name":(rp["name"] or f"Report ({rp['org']})")[:200],"published":rp["created"],"created_by_ref":ident["id"],
+             "object_refs":sorted(rp["refs"]),"external_references":[{"source_name":rp["org"],"url":url}]})
+    # indicators from iocs/*.csv (one file per report). Emit a property ONLY when its CSV cell
+    # is non-empty — never guess or back-fill. Link to an actor only on a real GTG match.
+    ioc_stats = {"files": [], "total": 0, "linked": 0, "unlinked": 0, "no_clean_pattern": 0,
+                 "by_type": {}, "by_harm_area": {}, "unlinked_gtg": {}}
+    ioc_dir = ROOT / "iocs"
+    for csvpath in (sorted(ioc_dir.glob("*.csv")) if ioc_dir.is_dir() else []):
+        with csvpath.open(encoding="utf-8-sig", newline="") as fh:
+            rows = list(csv.DictReader(fh))
+        fstat = {"file": csvpath.name, "rows": len(rows), "indicators": 0}
+        for row in rows:
+            g = lambda k: (row.get(k) or "").strip()
+            val, ioc_type = g("value"), g("type")
+            if not val or not ioc_type:      # a row with no observable is not an indicator
+                continue
+            pattern, scobj, x_extra = ioc_pattern_and_sco(ioc_type, val, g("platform"))
+            rid = g("id")
+            ind_id = rid if re.fullmatch(r"indicator--[0-9a-fA-F-]{36}", rid) else sid("indicator", refang(val))
+            created = _ioc_date_iso(g("report_date")) or EPOCH
+            valid_from = _ioc_date_iso(g("first_seen")) or _ioc_date_iso(g("report_date")) or EPOCH
+            ind = {"type":"indicator","spec_version":"2.1","id":ind_id,"created":created,"modified":created,
+                   "indicator_types":["malicious-activity"],"name":f"{ioc_type}: {val}",
+                   "pattern": pattern or f"[x-defanged-observable:value = '{_stix_str(refang(val))}']",
+                   "pattern_type":"stix","valid_from":valid_from}
+            vu = _ioc_date_iso(g("last_seen"), end=True)
+            if vu and vu > valid_from: ind["valid_until"] = vu   # STIX: valid_until must exceed valid_from
+            if g("description"): ind["description"] = g("description")
+            if g("reference_url"):
+                ind["external_references"] = [{"source_name": org_for(g("reference_url")), "url": g("reference_url")}]
+            labels = [x for x in (g("role"), g("handling")) if x]
+            if labels: ind["labels"] = labels
+            for prop, col in (("x_ioc_type","type"),("x_ioc_role","role"),("x_handling","handling"),
+                              ("x_gtg","gtg"),("x_harm_area","harm_area"),("x_case_study","case_study"),
+                              ("x_platform","platform")):
+                if g(col): ind[prop] = g(col)
+            ind.update(x_extra)
+            add(ind); fstat["indicators"] += 1; ioc_stats["total"] += 1
+            ioc_stats["by_type"][ioc_type] = ioc_stats["by_type"].get(ioc_type, 0) + 1
+            ha = g("harm_area") or "(unspecified)"
+            ioc_stats["by_harm_area"][ha] = ioc_stats["by_harm_area"].get(ha, 0) + 1
+            if not pattern: ioc_stats["no_clean_pattern"] += 1
+            if scobj:
+                add(scobj); rel(ind_id, scobj["id"], "based-on")
+            isid = gtg_index.get(g("gtg"))
+            if isid:
+                rel(ind_id, isid, "indicates"); ioc_stats["linked"] += 1
+            else:
+                ioc_stats["unlinked"] += 1
+                if g("gtg"): ioc_stats["unlinked_gtg"][g("gtg")] = ioc_stats["unlinked_gtg"].get(g("gtg"), 0) + 1
+        ioc_stats["files"].append(fstat)
+    allobjs = list(objs.values()) + list(rels.values())
+    allobjs.sort(key=lambda o: (o["type"], o["id"]))
+    return {"type":"bundle","id":sid("bundle","threat-actors-ai"),"objects":allobjs}, ioc_stats
+
+# ---------- HTML ----------
+def build_html(recs):
+    data = []
+    for r in recs:
+        data.append({"name":r["name"],"akas":r["akas"],"reported":r["reported"],"activity":r["activity"],
+                     "rsort":date_key(r["reported"]),"asort":date_key(r["activity"]),
+                     "brief":r["brief"],"ttp":clean(r["ttp_md"]),"table":r["table"],
+                     "links":[{"t":t or org_for(u),"u":u} for t,u in r["links"] if u.startswith("http")][:4]})
+    payload = json.dumps(data, ensure_ascii=False)
+    return HTML_TEMPLATE.replace("__DATA__", payload).replace("__N__", str(len(data)))
+
+HTML_TEMPLATE = r"""<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>AI Threat-Actor Tracker — OWASP GenAI Threat Intelligence Initiative</title>
+<style>
+:root{--bg:#0b0e14;--fg:#e6e6e6;--mut:#8a93a6;--line:#232838;--accent:#00e5ff;--card:#141925}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
+header{padding:18px 20px;border-bottom:1px solid var(--line)}h1{margin:0 0 4px;font-size:20px}
+.sub{color:var(--mut);font-size:13px}.sub a{color:var(--accent);text-decoration:none}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+input[type=search],select{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px}
+input[type=search]{min-width:260px;flex:1}
+.cnt{color:var(--mut);font-size:12px}.cols{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mut)}
+.cols label{cursor:pointer}.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{position:sticky;top:0;background:var(--card);cursor:pointer;white-space:nowrap;font-size:12px;color:var(--mut);border-bottom:1px solid var(--line)}
+th:hover{color:var(--fg)}tr:hover td{background:#0f131c}
+td.name{font-weight:600;white-space:nowrap}.aka,.ttp{color:var(--mut);font-size:12.5px}
+.date{white-space:nowrap;font-variant-numeric:tabular-nums}.unk{color:#5b6478}
+.brief{max-width:640px}.brief.clip{max-height:4.4em;overflow:hidden;position:relative}
+.more{color:var(--accent);cursor:pointer;font-size:12px}
+.pill{display:inline-block;background:#0f1a1e;border:1px solid #17323a;color:var(--accent);border-radius:20px;padding:1px 8px;font-size:11px;margin-right:4px}
+a.src{color:var(--accent);text-decoration:none;font-size:12px;display:block}
+footer{padding:16px 20px;color:var(--mut);font-size:12px;border-top:1px solid var(--line)}
+footer a{color:var(--accent);text-decoration:none}
+</style></head><body>
+<header><h1>Threat Actors' Use of AI — OWASP GenAI Threat Intelligence Initiative</h1>
+<div class=sub>Confirmed real-world threat-actor use of AI/LLMs, mapped to TTPs. Source of truth: the
+<a href="TRACKER.md">tracker table</a> · <a href="Sources.md">Sources</a> ·
+<a href="stix/threat-actors-ai-stix2.1.json">⬇ STIX 2.1 bundle</a> ·
+<a href="tracker.json">JSON</a> · <a href="https://genai.owasp.org/initiatives/#ai-threat-intel" target=_blank rel=noopener>OWASP GenAI</a></div></header>
+<div class=bar>
+<input id=q type=search placeholder="Search actors, AKAs, TTPs, briefs…">
+<select id=tbl><option value="">All tables</option><option value=main>Main</option><option value=deepfake>Deepfake</option></select>
+<span class=cnt id=cnt></span>
+<span class=cols id=cols></span>
+</div>
+<div class=wrap><table id=t><thead><tr id=hr></tr></thead><tbody id=tb></tbody></table></div>
+<footer>OWASP GenAI Security Project — Threat Intelligence Initiative · founded &amp; co-led by <a href="https://www.linkedin.com/in/cybershujin" target=_blank rel=noopener>Rachel James</a> &amp; <a href="https://www.linkedin.com/in/bryannakayama/" target=_blank rel=noopener>Bryan Nakayama</a> · origin: <a href="https://github.com/cybershujin/Threat-Actors-use-of-Artifical-Intelligence" target=_blank rel=noopener>cybershujin/Threat-Actors-use-of-Artifical-Intelligence</a><br>Generated from TRACKER.md · __N__ entries · auto-updated on each commit.</footer>
+<script>
+const DATA=__DATA__;
+const COLS=[["name","Name"],["akas","AKAs"],["reported","Reported"],["activity","Activity Span"],["brief","Brief"],["ttp","TTP"],["links","Sources"]];
+let vis={name:1,akas:1,reported:1,activity:1,brief:1,ttp:0,links:1},sortK="name",sortDir=1;
+const hr=document.getElementById("hr"),tb=document.getElementById("tb"),cols=document.getElementById("cols");
+COLS.forEach(([k,l])=>{const cb=document.createElement("label");cb.innerHTML=`<input type=checkbox ${vis[k]?"checked":""} data-k="${k}"> ${l}`;cols.appendChild(cb);});
+cols.onchange=e=>{vis[e.target.dataset.k]=e.target.checked?1:0;render();};
+function head(){hr.innerHTML="";COLS.forEach(([k,l])=>{if(!vis[k])return;const th=document.createElement("th");th.textContent=l+(sortK===k?(sortDir>0?" ▲":" ▼"):"");th.onclick=()=>{if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=(k==="reported"||k==="activity")?-1:1;}render();};hr.appendChild(th);});}
+function dcell(v){return v&&v.toLowerCase()!=="unknown"?`<span class=date>${v}</span>`:`<span class="date unk">Unknown</span>`;}
+function render(){
+ const q=document.getElementById("q").value.toLowerCase(),tf=document.getElementById("tbl").value;
+ let rows=DATA.filter(d=>(!tf||d.table===tf)&&(!q||JSON.stringify(d).toLowerCase().includes(q)));
+ rows.sort((a,b)=>{
+   if(sortK==="reported"||sortK==="activity"){
+     const ka=sortK==="reported"?a.rsort:a.asort, kb=sortK==="reported"?b.rsort:b.asort;
+     if(ka==null&&kb==null)return 0; if(ka==null)return 1; if(kb==null)return -1;  // Unknown always last
+     if(ka!==kb)return (ka-kb)*sortDir;
+     const oa=sortK==="reported"?a.asort:a.rsort, ob=sortK==="reported"?b.asort:b.rsort;  // tie-break on the other date column
+     if(oa==null&&ob==null)return 0; if(oa==null)return 1; if(ob==null)return -1;
+     return (oa-ob)*sortDir;
+   }
+   return ((a[sortK]||"")+"").localeCompare((b[sortK]||"")+"")*sortDir;});
+ head();tb.innerHTML="";
+ for(const d of rows){const tr=document.createElement("tr");let h="";
+  for(const [k,l] of COLS){if(!vis[k])continue;
+   if(k==="name")h+=`<td class=name>${esc(d.name)}${d.table==="deepfake"?' <span class=pill>deepfake</span>':''}</td>`;
+   else if(k==="akas")h+=`<td class=aka>${esc(d.akas)}</td>`;
+   else if(k==="reported"||k==="activity")h+=`<td>${dcell(d[k])}</td>`;
+   else if(k==="brief")h+=`<td><div class="brief clip">${esc(d.brief)}</div><span class=more>more ▾</span></td>`;
+   else if(k==="ttp")h+=`<td class=ttp>${esc(d.ttp)}</td>`;
+   else if(k==="links")h+=`<td>${d.links.map(x=>`<a class=src href="${x.u}" target=_blank rel=noopener>${esc(x.t)}</a>`).join("")}</td>`;
+  }
+  tr.innerHTML=h;tb.appendChild(tr);}
+ document.getElementById("cnt").textContent=rows.length+" / "+DATA.length;
+ tb.querySelectorAll(".more").forEach(m=>m.onclick=()=>{const b=m.previousElementSibling;b.classList.toggle("clip");m.textContent=b.classList.contains("clip")?"more ▾":"less ▴";});
+}
+function esc(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+document.getElementById("q").oninput=render;document.getElementById("tbl").onchange=render;render();
+</script></body></html>"""
+
+# ---------- main ----------
+def main():
+    recs, appendix = build_records()
+    (ROOT/"tracker.json").write_text(json.dumps({"generated_from":DATA_MD,"count":len(recs),
+        "entries":[{k:r[k] for k in ("table","name","akas","brief","ttp_md","reported","activity")} for r in recs]},
+        indent=1, ensure_ascii=False), encoding="utf-8")
+    bundle, ioc_stats = build_stix(recs, appendix)
+    (ROOT/"stix").mkdir(exist_ok=True)
+    (ROOT/"stix"/"threat-actors-ai-stix2.1.json").write_text(json.dumps(bundle, indent=1, ensure_ascii=False), encoding="utf-8")
+    (ROOT/"index.html").write_text(build_html(recs), encoding="utf-8")
+    types = {}
+    for o in bundle["objects"]: types[o["type"]] = types.get(o["type"],0)+1
+    print(f"entries={len(recs)}  stix_objects={len(bundle['objects'])}  {types}")
+    if ioc_stats["total"]:
+        print(f"iocs: {ioc_stats['total']} indicators from {len(ioc_stats['files'])} file(s)  "
+              f"linked={ioc_stats['linked']} unlinked={ioc_stats['unlinked']} "
+              f"no_clean_pattern={ioc_stats['no_clean_pattern']}")
+        print(f"  by_type={ioc_stats['by_type']}")
+        print(f"  by_harm_area={ioc_stats['by_harm_area']}")
+        if ioc_stats["unlinked_gtg"]:
+            print(f"  unlinked_gtg (no matching actor row)={ioc_stats['unlinked_gtg']}")
+
+if __name__ == "__main__":
+    main()
