@@ -493,7 +493,7 @@
    "id": "attack-pattern--639a6f8a-2b42-5b8f-80be-925696d4e3f4",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
-   "name": "T1608",
+   "name": "Stage Capabilities",
    "external_references": [
     {
      "source_name": "mitre-attack",

@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+candidates.json
+proposed-update-*.md
