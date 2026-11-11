@@ -49,18 +49,24 @@ def urls_in(s): return re.findall(r"https?://[^\s\)\]]+", s)
 
 def md_links(s): return re.findall(r"\[([^\]]+)\]\((https?://[^)]+)\)", s)
 
+# Matches a MITRE ATLAS id (AML.T####[.###], Category B) or a MITRE ATT&CK id (T####[.###] / TA####,
+# Category A). ATLAS is tried first; the ATT&CK branch's lookbehind stops it re-matching the T#### that
+# lives inside an AML.T#### id.
+TTP_ID_RE = re.compile(r"\bAML\.T\d{4}(?:\.\d{3})?\b|(?<!AML\.)\b(?:T\d{4}(?:\.\d{3})?|TA\d{4})\b")
+
 def parse_ttp(cell):
-    """Return list of {label, mitre:[ids], text} per <br><br> chunk."""
+    """Return list of {labels, mitre:[ids — ATT&CK and/or ATLAS], names} per <br><br> chunk."""
     out = []
     for chunk in re.split(r"<br\s*/?>\s*<br\s*/?>", cell):
         chunk = chunk.strip()
         if not chunk: continue
         labels = re.findall(r"\*\*(.+?)\*\*", chunk)
-        ids = re.findall(r"\b(T\d{4}(?:\.\d{3})?|TA\d{4})\b", chunk)
-        # technique name: text after the id up to <br> or end
-        names = {}
-        for m in re.finditer(r"\b(T\d{4}(?:\.\d{3})?|TA\d{4})\b\s*-\s*([^<|]+)", chunk):
-            names[m.group(1)] = m.group(2).strip().rstrip(".")
+        # technique id + the technique name that follows it ("<id> - <name>")
+        ids, names = [], {}
+        for m in TTP_ID_RE.finditer(chunk):
+            mid = m.group(0); ids.append(mid)
+            nm = re.match(r"\s*-\s*([^<|]+)", chunk[m.end():])
+            if nm: names[mid] = nm.group(1).strip().rstrip(".")
         out.append({"labels": [clean(x) for x in labels], "mitre": ids, "names": names})
     return out
 
@@ -180,6 +186,18 @@ def build_records():
                      "brief":clean(brief),"ttp_md":ttp,"ttp":parse_ttp(ttp),
                      "links":md_links(brief)+md_links(link)+[("",u) for u in urls_in(link)],
                      "reported":rep,"activity":ym})
+    # Category B — threat actors attacking AI systems (MITRE ATLAS). Parsed from the first table under
+    # the "## Category B" heading; same 7 columns as the main table. Empty until the first entry lands.
+    try:
+        bstart = next(i for i, l in enumerate(lines) if l.strip().startswith("## Category B"))
+        catb = parse_table(lines[bstart:], "| Name", 7)
+    except StopIteration:
+        catb = []
+    for c in catb:
+        name, akas, brief, ttp, link, rep, act = c
+        recs.append({"table":"catB","name":clean(name),"akas":clean(akas),"brief_md":brief,"brief":clean(brief),
+                     "ttp_md":ttp,"ttp":parse_ttp(ttp),"links":md_links(brief)+md_links(link)+[("",u) for u in urls_in(link)],
+                     "reported":rep,"activity":act})
     return recs, appendix
 
 # ---------- STIX ----------
@@ -303,9 +321,14 @@ def build_stix(recs, appendix):
                 add(ap); ap_ids.append(ap["id"])
             for mid in chunk["mitre"]:
                 nm = chunk["names"].get(mid, mid)
-                ap = sdo("attack-pattern", "mitre:"+mid, name=nm,
-                         external_references=[{"source_name":"mitre-attack","external_id":mid,
-                             "url":f"https://attack.mitre.org/techniques/{mid.replace('.', '/')}/"}])
+                if mid.startswith("AML."):          # MITRE ATLAS (Category B)
+                    ap = sdo("attack-pattern", "atlas:"+mid, name=nm,
+                             external_references=[{"source_name":"mitre-atlas","external_id":mid,
+                                 "url":f"https://atlas.mitre.org/techniques/{mid}"}])
+                else:                               # MITRE ATT&CK (Category A)
+                    ap = sdo("attack-pattern", "mitre:"+mid, name=nm,
+                             external_references=[{"source_name":"mitre-attack","external_id":mid,
+                                 "url":f"https://attack.mitre.org/techniques/{mid.replace('.', '/')}/"}])
                 add(ap); ap_ids.append(ap["id"])
         for ap in sorted(set(ap_ids)): rel(is_id, ap, "uses")
         # malware
@@ -425,7 +448,7 @@ footer a{color:var(--accent);text-decoration:none}
 <a href="tracker.json">JSON</a> · <a href="https://genai.owasp.org/initiatives/#ai-threat-intel" target=_blank rel=noopener>OWASP GenAI</a></div></header>
 <div class=bar>
 <input id=q type=search placeholder="Search actors, AKAs, TTPs, briefs…">
-<select id=tbl><option value="">All tables</option><option value=main>Main</option><option value=deepfake>Deepfake</option></select>
+<select id=tbl><option value="">All tables</option><option value=main>Main (Cat A)</option><option value=deepfake>Deepfake</option><option value=catB>Category B (ATLAS)</option></select>
 <span class=cnt id=cnt></span>
 <span class=cols id=cols></span>
 </div>
@@ -456,7 +479,7 @@ function render(){
  head();tb.innerHTML="";
  for(const d of rows){const tr=document.createElement("tr");let h="";
   for(const [k,l] of COLS){if(!vis[k])continue;
-   if(k==="name")h+=`<td class=name>${esc(d.name)}${d.table==="deepfake"?' <span class=pill>deepfake</span>':''}</td>`;
+   if(k==="name")h+=`<td class=name>${esc(d.name)}${d.table==="deepfake"?' <span class=pill>deepfake</span>':''}${d.table==="catB"?' <span class=pill>Cat B · ATLAS</span>':''}</td>`;
    else if(k==="akas")h+=`<td class=aka>${esc(d.akas)}</td>`;
    else if(k==="reported"||k==="activity")h+=`<td>${dcell(d[k])}</td>`;
    else if(k==="brief")h+=`<td><div class="brief clip">${esc(d.brief)}</div><span class=more>more ▾</span></td>`;

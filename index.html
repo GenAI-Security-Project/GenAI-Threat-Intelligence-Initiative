@@ -31,7 +31,7 @@ footer a{color:var(--accent);text-decoration:none}
 <a href="tracker.json">JSON</a> · <a href="https://genai.owasp.org/initiatives/#ai-threat-intel" target=_blank rel=noopener>OWASP GenAI</a></div></header>
 <div class=bar>
 <input id=q type=search placeholder="Search actors, AKAs, TTPs, briefs…">
-<select id=tbl><option value="">All tables</option><option value=main>Main</option><option value=deepfake>Deepfake</option></select>
+<select id=tbl><option value="">All tables</option><option value=main>Main (Cat A)</option><option value=deepfake>Deepfake</option><option value=catB>Category B (ATLAS)</option></select>
 <span class=cnt id=cnt></span>
 <span class=cols id=cols></span>
 </div>
@@ -62,7 +62,7 @@ function render(){
  head();tb.innerHTML="";
  for(const d of rows){const tr=document.createElement("tr");let h="";
   for(const [k,l] of COLS){if(!vis[k])continue;
-   if(k==="name")h+=`<td class=name>${esc(d.name)}${d.table==="deepfake"?' <span class=pill>deepfake</span>':''}</td>`;
+   if(k==="name")h+=`<td class=name>${esc(d.name)}${d.table==="deepfake"?' <span class=pill>deepfake</span>':''}${d.table==="catB"?' <span class=pill>Cat B · ATLAS</span>':''}</td>`;
    else if(k==="akas")h+=`<td class=aka>${esc(d.akas)}</td>`;
    else if(k==="reported"||k==="activity")h+=`<td>${dcell(d[k])}</td>`;
    else if(k==="brief")h+=`<td><div class="brief clip">${esc(d.brief)}</div><span class=more>more ▾</span></td>`;
