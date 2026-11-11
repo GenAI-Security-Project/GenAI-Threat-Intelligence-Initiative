@@ -15,20 +15,27 @@ Through this research it also became clear to me that there is not always an eas
 
 **Scope**
 
-This is not for:
+This table is the **Category A** catalog of the OWASP GenAI Threat Intelligence Initiative:
+confirmed, cited, real-world activity by threat actors **using AI/LLMs to conduct attacks**
+(LLM-enhanced phishing, malware development, reconnaissance, deepfake-enabled fraud), mapped to
+MITRE ATT&CK plus the custom LLM-TTP taxonomy in Appendix A.
 
-• Threat actors attacking AI / ML / LLMs
+Tracked by the initiative but **not in this table**:
 
-• Researchers attacking or finding exploits or possible uses AI by threat actors
+• **Threat actors *attacking* AI systems** (prompt injection, RAG poisoning, model supply-chain compromise) — this is **Category B**, mapped to MITRE ATLAS, and will be published as its own catalog. In scope for the initiative, just not in this Category A table.
 
-• Mis/dis/mal information campaigns using Deepfake technology
+Not in scope for the initiative:
 
-• Threats to AI users, or AI researchers 
+• Researchers finding exploits or demonstrating *possible* AI misuse (we track confirmed, attributed actor activity)
+
+• Mis/dis/mal-information and influence campaigns using deepfake technology
+
+• General threats to AI users or AI researchers
 
 Notes:
  **UnSub or Multiple UnSub - (sourcename)** used to refer to unnamed subjects, or multiple unnamed subjects mentioned in reports
 
-These these are taken from reports listed on the [Sources page](https://github.com/cybershujin/Threat-Actors-Use-of-Artifical-Intelligence/blob/main/Sources.md) but the TTP mapping is an effort by me to map to the closest possible MITRE ATT&CK technique used. If you find an entry and believe a better TTP mapping is available, please contact me and/or comment.
+These are taken from reports listed on the [Sources page](Sources.md) but the TTP mapping is an effort to map to the closest possible MITRE ATT&CK technique used. If you find an entry and believe a better TTP mapping is available, please open an issue or comment.
 
 | Name            | AKAs          | Brief                                                                                                          | TTP                                              | Link                          | Reported | Activity Span |
 | -------------- | -------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------- | --------- | ------------------- |
