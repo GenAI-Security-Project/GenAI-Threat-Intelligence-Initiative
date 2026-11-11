@@ -1,0 +1,38 @@
+#cloud-config
+# Bootstraps the OWASP GenAI TAXII 2.1 feed on a fresh Ubuntu 24.04 droplet.
+# Self-contained: installs Caddy + clones the repo + generates the feed + enables a 30-min
+# self-update timer. Any later fix is a git commit — the droplet heals itself, no SSH needed.
+package_update: true
+package_upgrade: false
+packages:
+  - git
+  - python3
+  - curl
+  - debian-keyring
+  - debian-archive-keyring
+  - apt-transport-https
+
+write_files:
+  - path: /opt/aictifeed/branch
+    # Source branch for the feed. Switch to "main" once the Phase-1/2 PRs merge.
+    content: "phase2/taxii-server\n"
+
+runcmd:
+  # Install Caddy from its official apt repository.
+  - curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+  - curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+  - apt-get update
+  - DEBIAN_FRONTEND=noninteractive apt-get install -y caddy
+  # Fetch the repo (public) and build the feed.
+  - git clone --branch phase2/taxii-server --depth 1 https://github.com/GenAI-Security-Project/GenAI-Threat-Intelligence-Initiative.git /opt/aictifeed/repo
+  - chmod +x /opt/aictifeed/repo/deploy/taxii/deploy.sh
+  - bash /opt/aictifeed/repo/deploy/taxii/deploy.sh
+  # Install the Caddy config and (re)start it.
+  - install -m 0644 /opt/aictifeed/repo/deploy/taxii/Caddyfile /etc/caddy/Caddyfile
+  - systemctl enable caddy
+  - systemctl restart caddy
+  # Install + start the self-update timer.
+  - install -m 0644 /opt/aictifeed/repo/deploy/taxii/aictifeed-update.service /etc/systemd/system/aictifeed-update.service
+  - install -m 0644 /opt/aictifeed/repo/deploy/taxii/aictifeed-update.timer /etc/systemd/system/aictifeed-update.timer
+  - systemctl daemon-reload
+  - systemctl enable --now aictifeed-update.timer
