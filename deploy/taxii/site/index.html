@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OWASP GenAI Threat Intelligence Feed</title>
+<style>
+  :root{--bg:#0b0e14;--fg:#e6e6e6;--mut:#8a93a6;--line:#232838;--accent:#00e5ff;--card:#141925}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,Segoe UI,Roboto,sans-serif}
+  main{max-width:820px;margin:0 auto;padding:40px 20px}
+  h1{font-size:26px;margin:0 0 6px}.sub{color:var(--mut);margin:0 0 28px}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0}
+  code{background:#0f131c;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:14px}
+  h2{font-size:16px;margin:0 0 10px}ul{margin:8px 0 0;padding-left:20px}li{margin:4px 0}
+  footer{color:var(--mut);font-size:13px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body><main>
+  <h1>OWASP GenAI Threat Intelligence Feed</h1>
+  <p class="sub">AI cyber threat intelligence, as STIX 2.1 / TAXII 2.1 — threat actors <b>using</b> AI to attack (Category A) and <b>attacking</b> AI systems (Category B).</p>
+
+  <div class="card">
+    <h2>TAXII 2.1</h2>
+    <p>Discovery endpoint:</p>
+    <p><code>https://taxii.aithreatintelfeed.org/taxii2/</code></p>
+    <p>Collections:</p>
+    <ul>
+      <li><b>All AI-CTI</b> — the full catalog</li>
+      <li><b>Category A</b> — actors using AI (MITRE ATT&amp;CK)</li>
+      <li><b>Category B</b> — actors attacking AI systems (MITRE ATLAS)</li>
+    </ul>
+    <p>Category is carried on every object via the <code>ai_cti_category</code> extension and an
+      <code>owasp-genai-category-*</code> label.</p>
+  </div>
+
+  <div class="card">
+    <h2>Direct downloads</h2>
+    <ul>
+      <li><a href="/stix/threat-actors-ai-stix2.1.json">STIX 2.1 bundle (full)</a></li>
+      <li><a href="https://github.com/GenAI-Security-Project/GenAI-Threat-Intelligence-Initiative">Project repository &amp; catalog</a></li>
+    </ul>
+  </div>
+
+  <footer>
+    OWASP GenAI Security Project — Threat Intelligence Initiative.
+    Feed regenerated automatically from the project's Git repository.
+  </footer>
+</main></body>
+</html>

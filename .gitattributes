@@ -1,0 +1,9 @@
+# Keep Unix line endings on everything the Linux droplet / CI executes.
+*.sh      text eol=lf
+*.py      text eol=lf
+*.yaml    text eol=lf
+*.yml     text eol=lf
+*.service text eol=lf
+*.timer   text eol=lf
+Caddyfile text eol=lf
+deploy/taxii/** text eol=lf
