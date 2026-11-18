@@ -75,15 +75,18 @@ words and flag it for the maintainer (ATLAS may have added/renamed a technique).
 - Jailbreak of a deployed model for abuse → AML.T0054 (LLM Jailbreak)
 - Poison training data → AML.T0020 (Poison Training Data)
 - RAG / retrieval-corpus poisoning → AML.T0070 (RAG Poisoning)  *(verify — recent addition)*
-- Backdoored / trojanized model → AML.T0018 (Backdoor ML Model: Poison / Inject Payload)
-- ML supply-chain compromise (model/data/software/hardware) → AML.T0010 (ML Supply Chain Compromise; e.g. .003 Model)
-- Exfiltration via inference API → AML.T0024 (Exfiltration via ML Inference API)
+- Backdoored / trojanized model → AML.T0018 (Manipulate AI Model; e.g. .000 Poison AI Model, .002 Embed Malware)
+- AI supply-chain compromise (model/data/software/hardware) → AML.T0010 (AI Supply Chain Compromise; e.g. .001 AI Software, .003 Model)
+- Victim runs unsafe model code / artifacts (e.g. trust_remote_code, pickle) → AML.T0011.000 (User Execution: Unsafe AI Artifacts)
+- Exfiltration via inference API → AML.T0024 (Exfiltration via AI Inference API)
 - LLM data leakage / sensitive-data disclosure → AML.T0057 (LLM Data Leakage)
-- LLM plugin / tool / agent-action compromise → AML.T0053 (LLM Plugin Compromise)
-- Erode model integrity (degrade/manipulate outputs) → AML.T0031 (Erode ML Model Integrity)
-- Denial of ML service → AML.T0029 (Denial of ML Service)
-- Downstream real-world harm from the above → AML.T0048 (External Harms; e.g. .000 Financial)
-- Inference-API access as a foothold → AML.T0040 (ML Model Inference API Access)
+- LLM plugin / tool / agent-action compromise → AML.T0053 (AI Agent Tool Invocation)
+- Erode model integrity (degrade/manipulate outputs) → AML.T0031 (Erode AI Model Integrity)
+- Denial of AI service → AML.T0029 (Denial of AI Service)
+- Downstream real-world harm from the above → AML.T0048 (External Harms; e.g. .000 Financial Harm)
+- Inference-API access as a foothold → AML.T0040 (AI Model Inference API Access)
+- Exposed AI gateway / app-builder exploited via a bug or default config → AML.T0049 (Exploit Public-Facing Application)
+- Stolen / default / leaked LLM provider keys and admin credentials → AML.T0055 (Unsecured Credentials)
 
 > Validation rule: every `AML.T####[.###]` proposed in a Category B row must appear in the live ATLAS matrix.
 > An A+B incident (an actor that USES AI to ATTACK another AI system) carries both an ATT&CK and an ATLAS ID.
