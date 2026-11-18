@@ -80,6 +80,10 @@ This is *not* for:
 |October | Recorded Future (Insikt Group) | [TAG-217 Targets South Korean Financial Services with ARTEX](https://www.recordedfuture.com/blog/tag-217-artex-south-korean-banks) |
 |October | Zscaler ThreatLabz | [Inside a Global AI-Assisted Hacking Campaign](https://www.zscaler.com/blogs/security-research/inside-global-ai-assisted-hacking-campaign) |
 |October | Unit 42 (Palo Alto Networks) | [Next Exploit Opportunities: How a Threat Actor Used AI to Help Plan and Execute Multiple Types of Cybercrime Activities](https://unit42.paloaltonetworks.com/ai-assisted-cybercrime-analysis/) |
+|November | Google GTIG | [GTIG AI Threat Tracker: Agentic Threat Activity Crosses a Significant Threshold](https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold) |
+|November | Amazon Threat Intelligence | [Amazon Threat Intelligence observes threat actors running cybercrime campaigns with ARTEX AI agents](https://aws.amazon.com/blogs/security/amazon-threat-intelligence-observes-threat-actors-running-cybercrime-campaigns-with-artex-ai-agents/) |
+|November | Cursor | [An update on our recent security incident](https://cursor.com/blog/security-incident-update) |
+|October | Pluto Security | [Hugging Face malware campaign: Load/Mine](https://pluto.security/blog/hugging-face-malware-campaign-load-mine/) |
 
 
 ## 2025 Reports
