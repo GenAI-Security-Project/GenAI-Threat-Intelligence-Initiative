@@ -1,0 +1,43 @@
+# OWASP GenAI Threat Intelligence Feed — Caddy
+# Auto-TLS (Let's Encrypt) for the named domains once their DNS points at this droplet.
+# Optional: set an admin email for cert-expiry notices by uncommenting:
+# {
+#     email admin@aithreatintelfeed.org
+# }
+
+# TAXII 2.1 feed (HTTPS). Discovery: https://taxii.aithreatintelfeed.org/taxii2/
+taxii.aithreatintelfeed.org {
+	root * /var/www/taxii
+	@taxii path /taxii2 /taxii2/*
+	header @taxii {
+		Content-Type "application/taxii+json;version=2.1"
+		Access-Control-Allow-Origin "*"
+	}
+	file_server {
+		index index.json
+	}
+}
+
+# Public landing page + direct STIX bundle download.
+aithreatintelfeed.org {
+	root * /var/www/site
+	file_server {
+		index index.html
+	}
+}
+
+# Everything else -> canonical .org
+www.aithreatintelfeed.org, aithreatintelfeed.com, www.aithreatintelfeed.com {
+	redir https://aithreatintelfeed.org{uri} permanent
+}
+
+# Plain-HTTP mirror on :8080 for health checks / smoke tests before DNS+TLS are live.
+# Serves the same read-only TAXII tree. Safe to leave open (data is public) or close later.
+:8080 {
+	root * /var/www/taxii
+	@taxii path /taxii2 /taxii2/*
+	header @taxii Content-Type "application/taxii+json;version=2.1"
+	file_server {
+		index index.json
+	}
+}

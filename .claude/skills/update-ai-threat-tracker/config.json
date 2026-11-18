@@ -1,0 +1,39 @@
+{
+  "repo": { "owner": "GenAI-Security-Project", "name": "GenAI-Threat-Intelligence-Initiative", "base_branch": "main" },
+  "data_file": "TRACKER.md",
+  "sources_file": "Sources.md",
+
+  "_scope": "Two categories. A = threat actors USING AI to attack (MITRE ATT&CK + LLM-TTP taxonomy, Appendix A). B = threat actors ATTACKING AI systems (MITRE ATLAS). Both require confirmed, in-the-wild, attributed activity — never researcher/vendor proof-of-concept. See docs/Collection-Pipeline-Design.md.",
+
+  "budget": {
+    "per_run_usd": 16.0,
+    "dashboard_monthly_cap_usd": 40.0,
+    "model": "sonar-deep-research",
+    "reasoning_effort": "high"
+  },
+
+  "trusted_sources": {
+    "_comment": "Domains that BYPASS the skeptic gate (still deduped + bias-flagged). Everything else is scrutinized. Match is by substring on the source host. Covers both Category A and B reporters.",
+    "domains": [
+      "anthropic.com", "openai.com", "cloud.google.com", "blog.google", "deepmind.google", "googleblog.com",
+      "microsoft.com", "huntress.com", "proofpoint.com", "crowdstrike.com", "intel471.com",
+      "recordedfuture.com", "mandiant.com", "checkpoint.com", "research.checkpoint.com",
+      "sentinelone.com", "ncsc.gov.uk", "ic3.gov", "fbi.gov",
+      "cisa.gov", "nsa.gov", "cyber.gov.au", "cyber.gc.ca", "ncsc.govt.nz"
+    ],
+    "labels": ["Anthropic","OpenAI","Google/GTIG","Microsoft","Huntress","Proofpoint","CrowdStrike","Intel471","Recorded Future","Mandiant","Check Point","SentinelOne","NCSC","FBI/IC3","Five Eyes (CISA/NSA/ACSC/CCCS/NZ NCSC)"]
+  },
+
+  "spam_denylist": {
+    "_comment": "Optional: pure SEO/aggregator hosts to exclude at retrieval. Keep short; retrieval is otherwise a wide net.",
+    "domains": []
+  },
+
+  "recurring_trackers_to_enumerate_every_run": [
+    "Google GTIG AI Threat Tracker (multiple editions/year)",
+    "Microsoft Threat Intelligence AI reports",
+    "OpenAI 'Disrupting malicious uses of AI' (quarterly)",
+    "Anthropic threat-intel / misuse reports",
+    "MITRE ATLAS case studies (atlas.mitre.org/studies) — Category B real-world incidents"
+  ]
+}

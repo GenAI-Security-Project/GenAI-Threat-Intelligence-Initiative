@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic refresh of the OWASP GenAI TAXII feed from Git
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

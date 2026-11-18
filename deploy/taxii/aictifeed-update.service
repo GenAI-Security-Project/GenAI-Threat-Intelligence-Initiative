@@ -1,0 +1,8 @@
+[Unit]
+Description=Regenerate the OWASP GenAI TAXII feed from Git
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/aictifeed/repo/deploy/taxii/deploy.sh

@@ -184,6 +184,13 @@ These are taken from reports listed on the [Sources page](Sources.md) but the TT
 
 
 
+## Category B — Threat actors attacking AI systems (MITRE ATLAS)
+
+Confirmed, in-the-wild activity by threat actors *targeting* AI/ML/LLM systems — prompt injection against deployed assistants/agents, jailbreak-for-abuse of live models, training-data / RAG poisoning, model or model-supply-chain compromise, and exfiltration via inference APIs — mapped to **MITRE ATLAS** (`AML.T####`). Same evidence bar as Category A: real adversary activity, not a researcher proof-of-concept. Populated by the collection pipeline + human review; this table is **empty until the first confirmed Category B entry is approved**.
+
+| Name | AKAs | Brief | TTP | Link | Reported | Activity Span |
+| --- | --- | --- | --- | --- | --- | --- |
+
 ## Appendix A: LLM-themed TTPs
 
 **LLM-informed reconnaissance:** Employing LLMs to gather actionable intelligence on technologies and potential vulnerabilities. (CREDIT: Microsoft)
