@@ -5,4 +5,4 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/opt/aictifeed/repo/deploy/taxii/deploy.sh
+ExecStart=/usr/bin/bash /opt/aictifeed/repo/deploy/taxii/deploy.sh

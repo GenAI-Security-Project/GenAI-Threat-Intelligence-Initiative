@@ -7,9 +7,9 @@ BRANCH="$(cat /opt/aictifeed/branch 2>/dev/null || echo main)"
 BASE_URL="${BASE_URL:-https://taxii.aithreatintelfeed.org}"
 
 cd "$REPO"
-# Track the configured branch (switch /opt/aictifeed/branch to 'main' once the PRs merge).
+# Track the configured branch (set /opt/aictifeed/branch). Reset to FETCH_HEAD, not origin/$BRANCH: a --single-branch clone has no origin/<other-branch> ref.
 git fetch --depth 1 origin "$BRANCH"
-git reset --hard "origin/$BRANCH"
+git reset --hard FETCH_HEAD
 
 # Build the static TAXII 2.1 tree.
 python3 deploy/taxii/generate_taxii.py \
