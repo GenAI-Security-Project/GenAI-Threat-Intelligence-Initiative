@@ -1,6 +1,6 @@
 {
  "generated_from": "TRACKER.md",
- "count": 158,
+ "count": 166,
  "entries": [
   {
    "table": "main",
@@ -285,9 +285,9 @@
    "table": "main",
    "name": "UNC1069",
    "akas": "MASAN, CryptoCore (DPRK; BlueNoroff/Lazarus-adjacent); MIDNIGHT NEPTUNE (GTIG’s Sep 2026 designation)",
-   "brief": "Used Gemini for cryptocurrency research and reconnaissance on where victims' wallet application data is stored, generated multilingual lures, and attempted crypto-theft code. Separately used AI-generated deepfake images/video (including a deepfaked crypto-company CEO on a Zoom call) to lure victims into installing the BIGMACHO backdoor disguised as a Zoom SDK. GTIG (see also the deepfake table below) [Update 2026-09] As \"MIDNIGHT NEPTUNE,\" increasingly integrated AI across the operational lifecycle: AI-crafted social-engineering personas and technical-troubleshooting lures targeting crypto orgs; DeepSeek-Coder-assisted development of cross-platform Python RATs (persistence, process injection, fileless execution, C2); LLM-drafted Bash scripts for lateral movement; and poisoned internal repository configurations with altered Claude CLI hooks to deploy the SOMBERMEME backdoor on developer interaction. GTIG",
+   "brief": "Used Gemini for cryptocurrency research and reconnaissance on where victims' wallet application data is stored, generated multilingual lures, and attempted crypto-theft code. Separately used AI-generated deepfake images/video (including a deepfaked crypto-company CEO on a Zoom call) to lure victims into installing the BIGMACHO backdoor disguised as a Zoom SDK. GTIG (see also the deepfake table below) [Update 2026-09] As \"MIDNIGHT NEPTUNE,\" increasingly integrated AI across the operational lifecycle: AI-crafted social-engineering personas and technical-troubleshooting lures targeting crypto orgs; DeepSeek-Coder-assisted development of cross-platform Python RATs (persistence, process injection, fileless execution, C2); LLM-drafted Bash scripts for lateral movement; and poisoned internal repository configurations with altered Claude CLI hooks to deploy the SOMBERMEME backdoor on developer interaction. GTIG [Update 2026-11] GTIG (16 Nov 2026) adds: AI-generated recruiter personas (images carrying SynthID watermarks) leading crypto-sector targets to fake meeting platforms with ClickFix lures, and GitHub Personal Access Tokens named after Microsoft Copilot to mask lateral movement. GTIG",
    "ttp_md": "**LLM-informed reconnaissance** T1593 - Search Open Websites/Domains<br><br>**LLM-supported social engineering** T1566 - Phishing<br><br>**LLM-aided development** T1587 - Develop Capabilities<br><br>**DeepFake for Impersonation** T1656 - Impersonation<br><br>**LLM-embedded malware (runtime generation)** T1059 - Command and Scripting Interpreter (SOMBERMEME backdoor via poisoned Claude CLI hooks)",
-   "reported": "Nov 2025 (updated Sep 2026)",
+   "reported": "Nov 2025 (updated Nov 2026)",
    "activity": "2025"
   },
   {
@@ -1272,6 +1272,33 @@
    "activity": "Aug 2026 – Oct 2026"
   },
   {
+   "table": "main",
+   "name": "UnSub (exploit_agent operator, French media/education sites) — GTIG",
+   "akas": "UnSub (no designation; Russian-language configuration comments)",
+   "brief": "GTIG found an exposed staging server hosting exploit_agent, a multi-agent vulnerability-research and weaponization framework that integrates multiple LLMs to continuously diff pre-/post-patch versions of popular web applications, draft exploits, and autonomously run exploitation and post-compromise scripts (internal recon, brute-forcing, webshell installation, removal of other attackers' webshells) against French media, entertainment and education websites; the config asked the operator to enter LLM API keys \"for auto-exploitation (exploit_agent pilot)\". *Analyst note: no MITRE IDs given by GTIG (analyst-mapped); activity window given only as \"in the past quarter\". Vendor source.* GTIG",
+   "ttp_md": "**LLM-orchestrated operations** TA0002 - Execution (agentic harness across kill-chain)<br><br>**LLM-assisted vulnerability research** T1587.004 - Develop Capabilities: Exploits<br><br>T1190 - Exploit Public-Facing Application<br><br>T1505.003 - Web Shell",
+   "reported": "Nov 2026",
+   "activity": "Unknown"
+  },
+  {
+   "table": "main",
+   "name": "UnSub (CAIRN operator, US aerospace) — GTIG",
+   "akas": "UnSub (no designation)",
+   "brief": "GTIG observed the open-source multi-agent pentest framework CAIRN (OODA loop, shared \"blackboard\" between specialized agents) used in live intrusion activity against targets including a US aerospace organization. *Analyst note: separate from the already-tracked Cairn user in the UnSub (Strix/Cairn/Hermes) row; GTIG gives little operational detail, no dates and no MITRE IDs. Vendor source.* GTIG",
+   "ttp_md": "**LLM-orchestrated operations** TA0002 - Execution (agentic harness across kill-chain)",
+   "reported": "Nov 2026",
+   "activity": "Unknown"
+  },
+  {
+   "table": "main",
+   "name": "LEAKY CASTLE",
+   "akas": "PRC contractor (GTIG)",
+   "brief": "GTIG reports a PRC contractor using LLMs to analyze, translate and interpret exfiltrated data, deriving organizational-structure insights that are added to finished intelligence reports sold to customers. *Analyst note: GTIG notes overlap with Wall Street Journal reporting; no MITRE IDs given (analyst-mapped). Vendor source.* GTIG",
+   "ttp_md": "**LLM-directed Automated Collection** T1119 - Automated Collection",
+   "reported": "Nov 2026",
+   "activity": "Jul 2026 – Sep 2026"
+  },
+  {
    "table": "deepfake",
    "name": "Multiple UnSubs",
    "akas": "",
@@ -1423,6 +1450,51 @@
    "ttp_md": "**DeepFake for Impersonation** T1656 - Impersonation<br><br>Financial fraud (BEC-style wire fraud)",
    "reported": "Sep 2026",
    "activity": "Feb 2026"
+  },
+  {
+   "table": "deepfake",
+   "name": "ARTEX operators (Chinese-nexus groups, moderate confidence)",
+   "akas": "",
+   "brief": "Amazon decoy telemetry showed ARTEX agents building a real-time deepfake video pipeline (open-source face-animation model, ~11.5 fps on a consumer GPU) to defeat selfie liveness checks and submitting forged ID images with fake camera metadata for document verification. *Analyst note: Amazon reports every recorded attempt was rejected by the vendor's server-side verdict; attempts, not confirmed account takeovers.* Amazon",
+   "ttp_md": "**DeepFake for Impersonation** T1656 - Impersonation",
+   "reported": "Nov 2026",
+   "activity": "Oct 2026 – Nov 2026"
+  },
+  {
+   "table": "catB",
+   "name": "UnSub (ARTEX agent campaigns stealing AI-platform credentials) — Amazon Threat Intelligence",
+   "akas": "UnSub (\"disparate Chinese-nexus groups\", moderate confidence); same tool as other ARTEX rows, distinct campaign",
+   "brief": "Amazon's MadPot decoy network (mimicking LLM inference APIs) captured autonomous ARTEX agents sending their own operating records, showing planner/worker/verification agents sweeping internet-exposed AI gateways and app builders (One API, New API, LiteLLM, Dify, Langflow, RAGFlow, Open WebUI, Ollama and others) via default/missing admin credentials, unauthenticated management endpoints, known CVEs and SSRF-to-metadata, then harvesting, validating and pooling LLM provider API keys to fund further inference. *Analyst note: A+B (actor uses AI agents to attack AI platforms). Amazon \"did not observe that activity as it happened and cannot verify the outcomes the agents reported\". Skeptic gate (aws.amazon.com is untrusted-tier): PASS on primary read. ATLAS: no clean ID for credential theft from AI gateways, so AML.T0040 is the closest seed mapping and the rest is described in words (maintainer to check for a newer ATLAS technique).* Amazon",
+   "ttp_md": "**Credential theft from exposed AI gateways / app builders (LLM key harvesting)** AML.T0040 - AI Model Inference API Access (closest; flag for maintainer)<br><br>*ATT&CK (A side):* **LLM-orchestrated operations** TA0002 - Execution<br><br>T1190 - Exploit Public-Facing Application<br><br>T1552 - Unsecured Credentials",
+   "reported": "Nov 2026",
+   "activity": "Oct 2026 – Nov 2026"
+  },
+  {
+   "table": "catB",
+   "name": "Financially motivated LLMjacking crews — GTIG/Mandiant",
+   "akas": "UnSub (no designation)",
+   "brief": "GTIG and Mandiant report intrusions throughout 2026 against financial-services, retail, transportation and technology organizations in North America, South America and Asia-Pacific in which actors stole cloud/AI service credentials (from public GitHub repositories and phished session tokens), exploited CVE-2026-40217 (a LiteLLM sandbox escape elevating limited virtual keys to admin), used a \"burn and rotate\" service-account pattern to evade rate limits, and ran millions of LLM API calls in ~24 hours; victim losses exceeded $100,000 in a day and reached $1M cumulatively in the worst cases. *Analyst note: Vendor source; ATLAS ID is a closest-seed mapping, flag for maintainer.* GTIG",
+   "ttp_md": "**LLMjacking (stolen AI-service credentials / key abuse)** AML.T0040 - AI Model Inference API Access (closest; flag for maintainer)<br><br>AML.T0048.000 - External Harms: Financial",
+   "reported": "Nov 2026",
+   "activity": "Jan 2026 – Nov 2026"
+  },
+  {
+   "table": "catB",
+   "name": "UnSub (Load/Mine Hugging Face model-repository campaign) — Pluto Security",
+   "akas": "UnSub; assessed financially motivated, Chinese-speaking operator or small group (Pluto: an assessment, not confirmed attribution)",
+   "brief": "Pluto Security found 31 malicious model repositories across seven Hugging Face/ModelScope accounts (first wave of 12 removed; a second wave of 19 appeared after disclosure) whose Python code runs on load when `trust_remote_code=True`, before any weights are used, installing watchdog/shell-profile persistence, SSH-key or reverse-shell backdoors, a fileless peakminer cryptominer disguised as a kernel worker, and a container-escape attempt; targets were self-hosted inference platforms (Xinference, GPUStack), rented GPU machines and notebooks. First-wave wallet received ~2,276 PRL (~$5,000) across 716 transactions; ~29.8k campaign downloads (downloads are not confirmed infections). *Analyst note: untrusted-tier vendor source, read at primary; real adversary operation with on-chain payout evidence.* Pluto Security",
+   "ttp_md": "**Malicious model repositories (trust_remote_code backdoor / cryptominer)** AML.T0010.003 - AI Supply Chain Compromise: Model<br><br>AML.T0018 - Manipulate AI Model: Backdoor/payload (closest; verify)<br><br>T1496 - Resource Hijacking (ATT&CK)",
+   "reported": "Oct 2026",
+   "activity": "Sep 2026 – Oct 2026"
+  },
+  {
+   "table": "catB",
+   "name": "UnSub (Fireworks AI → Cursor marketplace trojanized Claude Code extension) — Cursor",
+   "akas": "UnSub (no attribution by Cursor)",
+   "brief": "Cursor disclosed that an attacker used an access key Cursor had issued to inference provider Fireworks AI (exposed in a Fireworks compromise) to copy a read-only bucket of coding-agent session traces, harvested unredacted credentials from them to reach Cursor SaaS tools and non-production source repositories, and on 29 Oct 2026 planted trojanized copies of Anthropic's Claude Code extension (v2.1.312 and 2.1.313) in the cache serving Cursor's VS Code marketplace for ~11 hours; at most ~5,000 users could have received them; last attacker activity 1 Nov (blocked). Cursor states Anthropic did not publish the copies and Open VSX never carried them. *Analyst note: victim-disclosed incident report; actor unattributed. Skeptic gate (cursor.com untrusted-tier): PASS on primary read.* Cursor",
+   "ttp_md": "**AI developer-tool / AI-provider supply-chain compromise** AML.T0010 - AI Supply Chain Compromise<br><br>T1195.002 - Compromise Software Supply Chain (ATT&CK)",
+   "reported": "Nov 2026",
+   "activity": "Oct 2026 – Nov 2026"
   }
  ]
 }

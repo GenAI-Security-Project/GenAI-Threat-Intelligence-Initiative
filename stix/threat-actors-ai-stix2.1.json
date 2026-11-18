@@ -151,6 +151,53 @@
   {
    "type": "attack-pattern",
    "spec_version": "2.1",
+   "id": "attack-pattern--19cb344c-c0b3-5b77-a530-2c92e85f9e11",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "AI Supply Chain Compromise: Model",
+   "external_references": [
+    {
+     "source_name": "mitre-atlas",
+     "external_id": "AML.T0010.003",
+     "url": "https://atlas.mitre.org/techniques/AML.T0010.003"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--19d42dc6-549c-5670-8e39-6db3b198b834",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "Malicious model repositories (trust_remote_code backdoor / cryptominer)",
+   "description": "Custom LLM-themed TTP (see Appendix A).",
+   "x_llm_ttp": true,
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
    "id": "attack-pattern--1b91c674-5f59-56a5-b5a1-4069da6b45a5",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -641,6 +688,27 @@
      "url": "https://attack.mitre.org/techniques/T1071/"
     }
    ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--4261c65e-7b69-5e4b-a311-f91c43cdabba",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "Credential theft from exposed AI gateways / app builders (LLM key harvesting)",
+   "description": "Custom LLM-themed TTP (see Appendix A).",
+   "x_llm_ttp": true,
    "ai_cti_category": [
     "A"
    ],
@@ -1312,6 +1380,32 @@
   {
    "type": "attack-pattern",
    "spec_version": "2.1",
+   "id": "attack-pattern--863599a8-6d02-541e-a7b5-d2a2c11b6bbc",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "AI Model Inference API Access (closest; flag for maintainer)",
+   "external_references": [
+    {
+     "source_name": "mitre-atlas",
+     "external_id": "AML.T0040",
+     "url": "https://atlas.mitre.org/techniques/AML.T0040"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
    "id": "attack-pattern--868ff63c-98ad-5948-bc04-79e726559ba9",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -1490,6 +1584,32 @@
    ],
    "labels": [
     "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--98f48465-6239-5305-ba56-5b9ea87aaec8",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "External Harms: Financial",
+   "external_references": [
+    {
+     "source_name": "mitre-atlas",
+     "external_id": "AML.T0048.000",
+     "url": "https://atlas.mitre.org/techniques/AML.T0048.000"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
    ],
    "extensions": {
     "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
@@ -1755,11 +1875,58 @@
   {
    "type": "attack-pattern",
    "spec_version": "2.1",
+   "id": "attack-pattern--a593cc3d-51b0-53ef-92f1-4a0ccc4d13ff",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "Compromise Software Supply Chain (ATT&CK)",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1195.002",
+     "url": "https://attack.mitre.org/techniques/T1195/002/"
+    }
+   ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
    "id": "attack-pattern--a7784b97-1ca9-5ad6-9c79-b33fe650cbbc",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
    "name": "LLM-orchestrated operations (Agentic AI attack orchestration)",
    "description": "Where a threat actor delegates multi-stage execution of the intrusion lifecycle to an agentic LLM or AI coding tool (e.g., Claude Code), with the AI performing the majority of tactical actions under minimal human direction. Maps broadly across TA0002 Execution and multiple tactics.",
+   "x_llm_ttp": true,
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--a92b58a7-b5fb-5613-bdfe-a94911bd58aa",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "LLMjacking (stolen AI-service credentials / key abuse)",
+   "description": "Custom LLM-themed TTP (see Appendix A).",
    "x_llm_ttp": true,
    "ai_cti_category": [
     "A"
@@ -2099,6 +2266,32 @@
   {
    "type": "attack-pattern",
    "spec_version": "2.1",
+   "id": "attack-pattern--c80607f8-b20d-5789-9d11-d3fe47d24ee6",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "AI Supply Chain Compromise",
+   "external_references": [
+    {
+     "source_name": "mitre-atlas",
+     "external_id": "AML.T0010",
+     "url": "https://atlas.mitre.org/techniques/AML.T0010"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
    "id": "attack-pattern--cc9680c4-8878-52bc-b32a-06a244ac754a",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -2428,6 +2621,32 @@
   {
    "type": "attack-pattern",
    "spec_version": "2.1",
+   "id": "attack-pattern--e82410b3-cb73-53a6-af23-324c5aaa9fad",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "Resource Hijacking (ATT&CK)",
+   "external_references": [
+    {
+     "source_name": "mitre-attack",
+     "external_id": "T1496",
+     "url": "https://attack.mitre.org/techniques/T1496/"
+    }
+   ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
    "id": "attack-pattern--e9046859-778e-552b-9d7c-f863fec201e5",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -2605,6 +2824,27 @@
   {
    "type": "attack-pattern",
    "spec_version": "2.1",
+   "id": "attack-pattern--f230d534-ea4b-5a53-8831-b861d459b713",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "AI developer-tool / AI-provider supply-chain compromise",
+   "description": "Custom LLM-themed TTP (see Appendix A).",
+   "x_llm_ttp": true,
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
    "id": "attack-pattern--f2326aca-511d-505a-a5c4-19b88913a583",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -2647,6 +2887,32 @@
    ],
    "labels": [
     "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "attack-pattern",
+   "spec_version": "2.1",
+   "id": "attack-pattern--fb3a819f-f149-5ff4-afe0-d56cd6ea87d7",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "Manipulate AI Model: Backdoor/payload (closest; verify)",
+   "external_references": [
+    {
+     "source_name": "mitre-atlas",
+     "external_id": "AML.T0018",
+     "url": "https://atlas.mitre.org/techniques/AML.T0018"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
    ],
    "extensions": {
     "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
@@ -3536,6 +3802,15 @@
   {
    "type": "identity",
    "spec_version": "2.1",
+   "id": "identity--9f15b38a-fb35-5bc7-ba92-82dc72fc962d",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "cursor.com",
+   "identity_class": "organization"
+  },
+  {
+   "type": "identity",
+   "spec_version": "2.1",
    "id": "identity--9fa01b5e-d869-50f8-8e3b-10460e191787",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -3630,6 +3905,15 @@
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
    "name": "Symantec",
+   "identity_class": "organization"
+  },
+  {
+   "type": "identity",
+   "spec_version": "2.1",
+   "id": "identity--ca124142-2186-56ed-b5a3-86a8f6b0a73e",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "name": "pluto.security",
    "identity_class": "organization"
   },
   {
@@ -12665,6 +12949,40 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--1b4ddf93-d7c1-5354-8072-9d467c6c7470",
+   "created": "2026-10-01T00:00:00.000Z",
+   "modified": "2026-10-01T00:00:00.000Z",
+   "name": "UnSub (Load/Mine Hugging Face model-repository campaign) — Pluto Security",
+   "description": "Pluto Security found 31 malicious model repositories across seven Hugging Face/ModelScope accounts (first wave of 12 removed; a second wave of 19 appeared after disclosure) whose Python code runs on load when `trust_remote_code=True`, before any weights are used, installing watchdog/shell-profile persistence, SSH-key or reverse-shell backdoors, a fileless peakminer cryptominer disguised as a kernel worker, and a container-escape attempt; targets were self-hosted inference platforms (Xinference, GPUStack), rented GPU machines and notebooks. First-wave wallet received ~2,276 PRL (~$5,000) across 716 transactions; ~29.8k campaign downloads (downloads are not confirmed infections). *Analyst note: untrusted-tier vendor source, read at primary; real adversary operation with on-chain payout evidence.* Pluto Security",
+   "aliases": [
+    "UnSub; assessed financially motivated",
+    "Chinese-speaking operator or small group (Pluto: an assessment",
+    "not confirmed attribution)"
+   ],
+   "first_seen": "2026-09-01T00:00:00.000Z",
+   "last_seen": "2026-10-01T00:00:00.000Z",
+   "external_references": [
+    {
+     "source_name": "pluto.security",
+     "url": "https://pluto.security/blog/hugging-face-malware-campaign-load-mine/",
+     "description": "Pluto Security"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--1c11d67f-ede9-58de-993b-8db745da26ab",
    "created": "2026-05-01T00:00:00.000Z",
    "modified": "2026-05-01T00:00:00.000Z",
@@ -14050,6 +14368,36 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--665a3f50-494d-548d-957e-ea7a68b66242",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "ARTEX operators (Chinese-nexus groups, moderate confidence)",
+   "description": "Amazon decoy telemetry showed ARTEX agents building a real-time deepfake video pipeline (open-source face-animation model, ~11.5 fps on a consumer GPU) to defeat selfie liveness checks and submitting forged ID images with fake camera metadata for document verification. *Analyst note: Amazon reports every recorded attempt was rejected by the vendor's server-side verdict; attempts, not confirmed account takeovers.* Amazon",
+   "first_seen": "2026-10-01T00:00:00.000Z",
+   "last_seen": "2026-11-01T00:00:00.000Z",
+   "external_references": [
+    {
+     "source_name": "Amazon",
+     "url": "https://aws.amazon.com/blogs/security/amazon-threat-intelligence-observes-threat-actors-running-cybercrime-campaigns-with-artex-ai-agents/",
+     "description": "Amazon"
+    }
+   ],
+   "labels": [
+    "deepfake",
+    "owasp-genai-category-a"
+   ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--69116b48-ff5c-51df-8be6-77b09a1514e4",
    "created": "2025-08-01T00:00:00.000Z",
    "modified": "2025-08-01T00:00:00.000Z",
@@ -15046,6 +15394,36 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--94505e97-ec1c-52b0-a974-8e644e308bec",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "UnSub (CAIRN operator, US aerospace) — GTIG",
+   "description": "GTIG observed the open-source multi-agent pentest framework CAIRN (OODA loop, shared \"blackboard\" between specialized agents) used in live intrusion activity against targets including a US aerospace organization. *Analyst note: separate from the already-tracked Cairn user in the UnSub (Strix/Cairn/Hermes) row; GTIG gives little operational detail, no dates and no MITRE IDs. Vendor source.* GTIG",
+   "aliases": [
+    "UnSub (no designation)"
+   ],
+   "external_references": [
+    {
+     "source_name": "Google Threat Intelligence Group",
+     "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold",
+     "description": "GTIG"
+    }
+   ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--98a72e5f-6a44-5cec-b44a-d11a1cef78fe",
    "created": "2025-08-01T00:00:00.000Z",
    "modified": "2025-08-01T00:00:00.000Z",
@@ -15890,6 +16268,38 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--b6687540-c512-520b-99aa-3617fc8031cd",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "UnSub (Fireworks AI → Cursor marketplace trojanized Claude Code extension) — Cursor",
+   "description": "Cursor disclosed that an attacker used an access key Cursor had issued to inference provider Fireworks AI (exposed in a Fireworks compromise) to copy a read-only bucket of coding-agent session traces, harvested unredacted credentials from them to reach Cursor SaaS tools and non-production source repositories, and on 29 Oct 2026 planted trojanized copies of Anthropic's Claude Code extension (v2.1.312 and 2.1.313) in the cache serving Cursor's VS Code marketplace for ~11 hours; at most ~5,000 users could have received them; last attacker activity 1 Nov (blocked). Cursor states Anthropic did not publish the copies and Open VSX never carried them. *Analyst note: victim-disclosed incident report; actor unattributed. Skeptic gate (cursor.com untrusted-tier): PASS on primary read.* Cursor",
+   "aliases": [
+    "UnSub (no attribution by Cursor)"
+   ],
+   "first_seen": "2026-10-01T00:00:00.000Z",
+   "last_seen": "2026-11-01T00:00:00.000Z",
+   "external_references": [
+    {
+     "source_name": "cursor.com",
+     "url": "https://cursor.com/blog/security-incident-update",
+     "description": "Cursor"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--b76b437e-d1a8-5ef5-96aa-9591e46c988d",
    "created": "2025-08-01T00:00:00.000Z",
    "modified": "2025-08-01T00:00:00.000Z",
@@ -16297,6 +16707,40 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "UnSub (ARTEX agent campaigns stealing AI-platform credentials) — Amazon Threat Intelligence",
+   "description": "Amazon's MadPot decoy network (mimicking LLM inference APIs) captured autonomous ARTEX agents sending their own operating records, showing planner/worker/verification agents sweeping internet-exposed AI gateways and app builders (One API, New API, LiteLLM, Dify, Langflow, RAGFlow, Open WebUI, Ollama and others) via default/missing admin credentials, unauthenticated management endpoints, known CVEs and SSRF-to-metadata, then harvesting, validating and pooling LLM provider API keys to fund further inference. *Analyst note: A+B (actor uses AI agents to attack AI platforms). Amazon \"did not observe that activity as it happened and cannot verify the outcomes the agents reported\". Skeptic gate (aws.amazon.com is untrusted-tier): PASS on primary read. ATLAS: no clean ID for credential theft from AI gateways, so AML.T0040 is the closest seed mapping and the rest is described in words (maintainer to check for a newer ATLAS technique).* Amazon",
+   "aliases": [
+    "UnSub (\"disparate Chinese-nexus groups\"",
+    "moderate confidence); same tool as other ARTEX rows",
+    "distinct campaign"
+   ],
+   "first_seen": "2026-10-01T00:00:00.000Z",
+   "last_seen": "2026-11-01T00:00:00.000Z",
+   "external_references": [
+    {
+     "source_name": "Amazon",
+     "url": "https://aws.amazon.com/blogs/security/amazon-threat-intelligence-observes-threat-actors-running-cybercrime-campaigns-with-artex-ai-agents/",
+     "description": "Amazon"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--c5755016-23ee-5a93-bd12-5b47e9780ac5",
    "created": "2026-10-01T00:00:00.000Z",
    "modified": "2026-10-01T00:00:00.000Z",
@@ -16527,6 +16971,38 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--d1ee4d76-e478-5367-90f2-2c46002b35aa",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "LEAKY CASTLE",
+   "description": "GTIG reports a PRC contractor using LLMs to analyze, translate and interpret exfiltrated data, deriving organizational-structure insights that are added to finished intelligence reports sold to customers. *Analyst note: GTIG notes overlap with Wall Street Journal reporting; no MITRE IDs given (analyst-mapped). Vendor source.* GTIG",
+   "aliases": [
+    "PRC contractor (GTIG)"
+   ],
+   "first_seen": "2026-07-01T00:00:00.000Z",
+   "last_seen": "2026-09-01T00:00:00.000Z",
+   "external_references": [
+    {
+     "source_name": "Google Threat Intelligence Group",
+     "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold",
+     "description": "GTIG"
+    }
+   ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--d8b11f0b-01ab-50dc-baf0-9f6cedf85d49",
    "created": "2026-07-01T00:00:00.000Z",
    "modified": "2026-07-01T00:00:00.000Z",
@@ -16648,6 +17124,38 @@
   {
    "type": "intrusion-set",
    "spec_version": "2.1",
+   "id": "intrusion-set--e86ea61c-ac0d-58f4-89dc-7b31e1e66af4",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "Financially motivated LLMjacking crews — GTIG/Mandiant",
+   "description": "GTIG and Mandiant report intrusions throughout 2026 against financial-services, retail, transportation and technology organizations in North America, South America and Asia-Pacific in which actors stole cloud/AI service credentials (from public GitHub repositories and phished session tokens), exploited CVE-2026-40217 (a LiteLLM sandbox escape elevating limited virtual keys to admin), used a \"burn and rotate\" service-account pattern to evade rate limits, and ran millions of LLM API calls in ~24 hours; victim losses exceeded $100,000 in a day and reached $1M cumulatively in the worst cases. *Analyst note: Vendor source; ATLAS ID is a closest-seed mapping, flag for maintainer.* GTIG",
+   "aliases": [
+    "UnSub (no designation)"
+   ],
+   "first_seen": "2026-01-01T00:00:00.000Z",
+   "last_seen": "2026-11-01T00:00:00.000Z",
+   "external_references": [
+    {
+     "source_name": "Google Threat Intelligence Group",
+     "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold",
+     "description": "GTIG"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
    "id": "intrusion-set--e946cd23-fc33-50d0-8e17-a2fc70e1b067",
    "created": "2026-09-01T00:00:00.000Z",
    "modified": "2026-09-01T00:00:00.000Z",
@@ -16664,6 +17172,36 @@
      "source_name": "Anthropic",
      "url": "https://www.anthropic.com/threat-intelligence-report-september-2026",
      "description": "Anthropic"
+    }
+   ],
+   "ai_cti_category": [
+    "A"
+   ],
+   "labels": [
+    "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "intrusion-set",
+   "spec_version": "2.1",
+   "id": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "UnSub (exploit_agent operator, French media/education sites) — GTIG",
+   "description": "GTIG found an exposed staging server hosting exploit_agent, a multi-agent vulnerability-research and weaponization framework that integrates multiple LLMs to continuously diff pre-/post-patch versions of popular web applications, draft exploits, and autonomously run exploitation and post-compromise scripts (internal recon, brute-forcing, webshell installation, removal of other attackers' webshells) against French media, entertainment and education websites; the config asked the operator to enter LLM API keys \"for auto-exploitation (exploit_agent pilot)\". *Analyst note: no MITRE IDs given by GTIG (analyst-mapped); activity window given only as \"in the past quarter\". Vendor source.* GTIG",
+   "aliases": [
+    "UnSub (no designation; Russian-language configuration comments)"
+   ],
+   "external_references": [
+    {
+     "source_name": "Google Threat Intelligence Group",
+     "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold",
+     "description": "GTIG"
     }
    ],
    "ai_cti_category": [
@@ -17143,7 +17681,7 @@
    "created": "2025-11-01T00:00:00.000Z",
    "modified": "2025-11-01T00:00:00.000Z",
    "name": "UNC1069",
-   "description": "Used Gemini for cryptocurrency research and reconnaissance on where victims' wallet application data is stored, generated multilingual lures, and attempted crypto-theft code. Separately used AI-generated deepfake images/video (including a deepfaked crypto-company CEO on a Zoom call) to lure victims into installing the BIGMACHO backdoor disguised as a Zoom SDK. GTIG (see also the deepfake table below) [Update 2026-09] As \"MIDNIGHT NEPTUNE,\" increasingly integrated AI across the operational lifecycle: AI-crafted social-engineering personas and technical-troubleshooting lures targeting crypto orgs; DeepSeek-Coder-assisted development of cross-platform Python RATs (persistence, process injection, fileless execution, C2); LLM-drafted Bash scripts for lateral movement; and poisoned internal repository configurations with altered Claude CLI hooks to deploy the SOMBERMEME backdoor on developer interaction. GTIG",
+   "description": "Used Gemini for cryptocurrency research and reconnaissance on where victims' wallet application data is stored, generated multilingual lures, and attempted crypto-theft code. Separately used AI-generated deepfake images/video (including a deepfaked crypto-company CEO on a Zoom call) to lure victims into installing the BIGMACHO backdoor disguised as a Zoom SDK. GTIG (see also the deepfake table below) [Update 2026-09] As \"MIDNIGHT NEPTUNE,\" increasingly integrated AI across the operational lifecycle: AI-crafted social-engineering personas and technical-troubleshooting lures targeting crypto orgs; DeepSeek-Coder-assisted development of cross-platform Python RATs (persistence, process injection, fileless execution, C2); LLM-drafted Bash scripts for lateral movement; and poisoned internal repository configurations with altered Claude CLI hooks to deploy the SOMBERMEME backdoor on developer interaction. GTIG [Update 2026-11] GTIG (16 Nov 2026) adds: AI-generated recruiter personas (images carrying SynthID watermarks) leading crypto-sector targets to fake meeting platforms with ClickFix lures, and GitHub Personal Access Tokens named after Microsoft Copilot to mask lateral movement. GTIG",
    "aliases": [
     "MASAN",
     "CryptoCore (DPRK; BlueNoroff",
@@ -17160,6 +17698,11 @@
     {
      "source_name": "Google Threat Intelligence Group",
      "url": "https://cloud.google.com/blog/topics/threat-intelligence/from-prompting-to-autonomy-the-evolution-of-adversarial-ai",
+     "description": "GTIG"
+    },
+    {
+     "source_name": "Google Threat Intelligence Group",
+     "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold",
      "description": "GTIG"
     },
     {
@@ -18022,6 +18565,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--05e85a18-bc3e-5e18-9b52-7fb6219eebe8",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--1b4ddf93-d7c1-5354-8072-9d467c6c7470",
+   "target_ref": "attack-pattern--fb3a819f-f149-5ff4-afe0-d56cd6ea87d7"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--06578aca-c7a4-52b6-b69d-acaa602a7819",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -18248,6 +18801,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--1eaf1cc1-f275-5798-bbc0-94dc79161987",
    "target_ref": "attack-pattern--834c8c58-7552-57fe-a2c2-a08c9a686021"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--0bef261f-3783-5b0c-b77a-109f1c66cfb0",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e86ea61c-ac0d-58f4-89dc-7b31e1e66af4",
+   "target_ref": "attack-pattern--98f48465-6239-5305-ba56-5b9ea87aaec8"
   },
   {
    "type": "relationship",
@@ -18682,6 +19245,26 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--1372b4cc-5b78-5b9c-813f-9c140b5cb01c",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "target_ref": "attack-pattern--71e08a57-0dbb-54d4-853a-732ace34f9ac"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--1380f661-cda1-5354-ad90-ad7c16844d6d",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "target_ref": "attack-pattern--b0caf548-cb26-573e-97e7-5855a65e445b"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--13884f28-a1ba-5632-a6dd-d57cb8caa9ac",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -19008,6 +19591,16 @@
    "relationship_type": "indicates",
    "source_ref": "indicator--7e4a757b-a87d-5cb7-844b-88edc52f85fd",
    "target_ref": "intrusion-set--eb03e27c-f174-547e-856f-46a80cb406b6"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--1acf6853-c366-5bbc-9b4d-d2c08c50108f",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--d1ee4d76-e478-5367-90f2-2c46002b35aa",
+   "target_ref": "attack-pattern--514f83a2-c1de-5f2c-823b-f63408c046dc"
   },
   {
    "type": "relationship",
@@ -19512,6 +20105,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--279cb2d7-2941-5ea2-82b3-f8b3b8e58299",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e86ea61c-ac0d-58f4-89dc-7b31e1e66af4",
+   "target_ref": "attack-pattern--863599a8-6d02-541e-a7b5-d2a2c11b6bbc"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--27f22aae-597d-579c-9a60-152428b63ee9",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -19668,6 +20271,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--ca2c0860-5318-5d1f-8fc9-f92454e22453",
    "target_ref": "attack-pattern--0f78fc83-9b4a-59df-9a92-f2db1ca0c222"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--2c204a9b-f1ee-5a31-bc18-ea85eb3d2ac0",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "target_ref": "attack-pattern--b0caf548-cb26-573e-97e7-5855a65e445b"
   },
   {
    "type": "relationship",
@@ -19882,6 +20495,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--30e49f37-d48c-5a61-b04b-835d066d6614",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "target_ref": "attack-pattern--4902ab05-3a65-5a4c-b13c-b4dc7e68ae07"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--310e5e39-d362-503b-bf64-3e149775bd01",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -20008,6 +20631,16 @@
    "relationship_type": "based-on",
    "source_ref": "indicator--2c31e056-9d29-5a08-8494-ff5f4b5530b7",
    "target_ref": "ipv4-addr--2275f755-c941-543c-b993-19796ea3e315"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--35064a5a-a64c-55e4-90ed-e999bef57bc4",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--94505e97-ec1c-52b0-a974-8e644e308bec",
+   "target_ref": "attack-pattern--8dbc0572-5bce-5be0-b904-f364fbcf1bcf"
   },
   {
    "type": "relationship",
@@ -20712,6 +21345,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--44a468e8-55e0-58ce-8d6d-d011c6ce2517",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--94505e97-ec1c-52b0-a974-8e644e308bec",
+   "target_ref": "attack-pattern--4902ab05-3a65-5a4c-b13c-b4dc7e68ae07"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--451bd2b0-46c3-575c-b99d-521381307147",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -21002,6 +21645,26 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--4bf54966-2dbd-5c13-9d4e-7875beb990c3",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--1b4ddf93-d7c1-5354-8072-9d467c6c7470",
+   "target_ref": "attack-pattern--19d42dc6-549c-5670-8e39-6db3b198b834"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--4bffe84f-4efe-55a8-9da9-5e92b86c4c4c",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "target_ref": "attack-pattern--4261c65e-7b69-5e4b-a311-f91c43cdabba"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--4c11fe54-bf12-5c60-8515-8b8269216bdd",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -21158,6 +21821,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--91e02f71-5fd1-5a98-be85-f5f7dd491fae",
    "target_ref": "attack-pattern--4902ab05-3a65-5a4c-b13c-b4dc7e68ae07"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--4e62bf9e-3533-50ca-b423-3674a9138c41",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--665a3f50-494d-548d-957e-ea7a68b66242",
+   "target_ref": "attack-pattern--a202c7f2-f85c-5e06-ab8f-f2ac9ef599cb"
   },
   {
    "type": "relationship",
@@ -21602,6 +22275,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--588bfd00-438f-5233-b65b-17e2d72781a9",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--b6687540-c512-520b-99aa-3617fc8031cd",
+   "target_ref": "attack-pattern--c80607f8-b20d-5789-9d11-d3fe47d24ee6"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--58c1b49b-4ef8-5c9f-ac92-65abaac6c94c",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -21798,6 +22481,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--068441ea-dc76-5093-a136-caf8f1b804e6",
    "target_ref": "attack-pattern--0f78fc83-9b4a-59df-9a92-f2db1ca0c222"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--5b6a3530-6e84-5fd4-926a-7f3a8bf48aa0",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--d1ee4d76-e478-5367-90f2-2c46002b35aa",
+   "target_ref": "attack-pattern--29fdd22a-f083-5777-ba3a-264190b7e019"
   },
   {
    "type": "relationship",
@@ -22342,6 +23035,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--68e4c36b-8aa0-5c0c-843f-41cae0483920",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "target_ref": "attack-pattern--8dbc0572-5bce-5be0-b904-f364fbcf1bcf"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--6917b135-a24a-5600-8fdd-373e35cb88a9",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -22418,6 +23121,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--303f20af-6a65-50b1-945c-6585c8001844",
    "target_ref": "attack-pattern--51e7ae75-a0e3-5a0d-a031-2b25e2fc568a"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--6a8f3ae0-1a10-5b5a-bdeb-82393476d13e",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "target_ref": "attack-pattern--e593b544-e68f-5823-8dac-01fca2ecf7a3"
   },
   {
    "type": "relationship",
@@ -22978,6 +23691,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--91e02f71-5fd1-5a98-be85-f5f7dd491fae",
    "target_ref": "attack-pattern--dbb122a1-547c-5c18-8147-2dcfcfeaf934"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--72f88850-ed50-5a15-859d-9a9b9c7ce2b6",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "target_ref": "attack-pattern--4902ab05-3a65-5a4c-b13c-b4dc7e68ae07"
   },
   {
    "type": "relationship",
@@ -23612,6 +24335,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--86517be6-25fb-5306-ad59-18308f29e7b0",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--665a3f50-494d-548d-957e-ea7a68b66242",
+   "target_ref": "attack-pattern--2962f035-759d-5d5f-9ed8-590f143a28ba"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--86b9d7b3-db99-5b84-b94f-0eb2b5de812b",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -23962,6 +24695,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--8e6cf554-0051-5540-9d79-78924ca67da1",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "target_ref": "attack-pattern--863599a8-6d02-541e-a7b5-d2a2c11b6bbc"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--8e8c3089-2bc3-53df-ab4a-5339f0058727",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -24108,6 +24851,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--303f20af-6a65-50b1-945c-6585c8001844",
    "target_ref": "attack-pattern--390c55e0-084f-5cb6-be7b-e30539db73dd"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--92730119-00dc-5344-9143-9de1d1dd62f5",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--b6687540-c512-520b-99aa-3617fc8031cd",
+   "target_ref": "attack-pattern--a593cc3d-51b0-53ef-92f1-4a0ccc4d13ff"
   },
   {
    "type": "relationship",
@@ -25332,6 +26085,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--afd2cda0-ffa0-5c7d-af86-d92de79d9d95",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--1b4ddf93-d7c1-5354-8072-9d467c6c7470",
+   "target_ref": "attack-pattern--e82410b3-cb73-53a6-af23-324c5aaa9fad"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--b00440f6-33c6-5cd4-b19c-172babbf4f79",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -25438,6 +26201,16 @@
    "relationship_type": "based-on",
    "source_ref": "indicator--0ef40b4e-799e-550f-9a2e-a7c2c8d226f3",
    "target_ref": "domain-name--a4b8f4f8-3c44-58e8-b8e7-54e7d0d42635"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--b1d84618-4163-542b-8c7d-87d489d71914",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2",
+   "target_ref": "attack-pattern--81dab0da-3b91-576b-a330-f420e181cf9b"
   },
   {
    "type": "relationship",
@@ -26262,6 +27035,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--c234da18-c7fb-59e2-b54a-cb80882aad41",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--b6687540-c512-520b-99aa-3617fc8031cd",
+   "target_ref": "attack-pattern--f230d534-ea4b-5a53-8831-b861d459b713"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--c2407266-6bb6-5248-96b5-d2558ce1897d",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -26448,6 +27231,16 @@
    "relationship_type": "based-on",
    "source_ref": "indicator--eef621a9-3d72-53d1-8459-5140ac8226ae",
    "target_ref": "domain-name--beff50a0-7ce3-5340-9228-024b79ee50b5"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--c8230627-ed02-56bf-9b8e-045f60820b5e",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "target_ref": "attack-pattern--8dbc0572-5bce-5be0-b904-f364fbcf1bcf"
   },
   {
    "type": "relationship",
@@ -26682,6 +27475,16 @@
   {
    "type": "relationship",
    "spec_version": "2.1",
+   "id": "relationship--cdf79e6a-282b-5b8b-8c5f-3333fba85f40",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e86ea61c-ac0d-58f4-89dc-7b31e1e66af4",
+   "target_ref": "attack-pattern--a92b58a7-b5fb-5613-bdfe-a94911bd58aa"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
    "id": "relationship--cdffdc1c-1396-5c87-add0-5ade738a122f",
    "created": "2024-01-01T00:00:00.000Z",
    "modified": "2024-01-01T00:00:00.000Z",
@@ -26798,6 +27601,16 @@
    "relationship_type": "based-on",
    "source_ref": "indicator--7d63a534-4ea9-58fe-8d42-ed64d01bcddb",
    "target_ref": "url--8c20f9f5-a1c4-555b-b122-308a084785ae"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--d0338ae5-55bd-5c9f-a8db-71f078d5ba3c",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+   "target_ref": "attack-pattern--a2e50fce-c8f4-58ba-8e76-ddb9d31632c4"
   },
   {
    "type": "relationship",
@@ -27968,6 +28781,16 @@
    "relationship_type": "uses",
    "source_ref": "intrusion-set--df66a45a-cabc-52dd-9391-b870d95aab91",
    "target_ref": "attack-pattern--a7784b97-1ca9-5ad6-9c79-b33fe650cbbc"
+  },
+  {
+   "type": "relationship",
+   "spec_version": "2.1",
+   "id": "relationship--eb002df2-478a-5d76-828f-1c61a0db75de",
+   "created": "2024-01-01T00:00:00.000Z",
+   "modified": "2024-01-01T00:00:00.000Z",
+   "relationship_type": "uses",
+   "source_ref": "intrusion-set--1b4ddf93-d7c1-5354-8072-9d467c6c7470",
+   "target_ref": "attack-pattern--19cb344c-c0b3-5b77-a530-2c92e85f9e11"
   },
   {
    "type": "relationship",
@@ -29796,6 +30619,39 @@
   {
    "type": "report",
    "spec_version": "2.1",
+   "id": "report--4efd0d09-5f0b-5c54-b023-3ca3be917ede",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "Cursor – An update on our recent security incident",
+   "published": "2026-11-01T00:00:00.000Z",
+   "created_by_ref": "identity--9f15b38a-fb35-5bc7-ba92-82dc72fc962d",
+   "object_refs": [
+    "attack-pattern--a593cc3d-51b0-53ef-92f1-4a0ccc4d13ff",
+    "attack-pattern--c80607f8-b20d-5789-9d11-d3fe47d24ee6",
+    "attack-pattern--f230d534-ea4b-5a53-8831-b861d459b713",
+    "intrusion-set--b6687540-c512-520b-99aa-3617fc8031cd"
+   ],
+   "external_references": [
+    {
+     "source_name": "cursor.com",
+     "url": "https://cursor.com/blog/security-incident-update"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "report",
+   "spec_version": "2.1",
    "id": "report--4fb09dc5-8dd3-5166-9549-a38cad4e1149",
    "created": "2026-08-01T00:00:00.000Z",
    "modified": "2026-08-01T00:00:00.000Z",
@@ -30153,6 +31009,64 @@
    ],
    "labels": [
     "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "report",
+   "spec_version": "2.1",
+   "id": "report--6d12b9ab-764b-57e5-9135-7f5e74354dc3",
+   "created": "2025-11-01T00:00:00.000Z",
+   "modified": "2025-11-01T00:00:00.000Z",
+   "name": "GTIG – Agentic Threat Activity Crosses a Significant Threshold",
+   "published": "2025-11-01T00:00:00.000Z",
+   "created_by_ref": "identity--d632509b-e5cd-5c0d-8c6a-dcc315806504",
+   "object_refs": [
+    "attack-pattern--2962f035-759d-5d5f-9ed8-590f143a28ba",
+    "attack-pattern--29fdd22a-f083-5777-ba3a-264190b7e019",
+    "attack-pattern--3046ce8b-9053-50d5-b4e4-ef6d1e99460d",
+    "attack-pattern--459f1a72-f3e9-53f0-a9d1-4764253d6afb",
+    "attack-pattern--4902ab05-3a65-5a4c-b13c-b4dc7e68ae07",
+    "attack-pattern--514f83a2-c1de-5f2c-823b-f63408c046dc",
+    "attack-pattern--51e7ae75-a0e3-5a0d-a031-2b25e2fc568a",
+    "attack-pattern--71e08a57-0dbb-54d4-853a-732ace34f9ac",
+    "attack-pattern--834c8c58-7552-57fe-a2c2-a08c9a686021",
+    "attack-pattern--863599a8-6d02-541e-a7b5-d2a2c11b6bbc",
+    "attack-pattern--8dbc0572-5bce-5be0-b904-f364fbcf1bcf",
+    "attack-pattern--98f48465-6239-5305-ba56-5b9ea87aaec8",
+    "attack-pattern--a202c7f2-f85c-5e06-ab8f-f2ac9ef599cb",
+    "attack-pattern--a2e50fce-c8f4-58ba-8e76-ddb9d31632c4",
+    "attack-pattern--a92b58a7-b5fb-5613-bdfe-a94911bd58aa",
+    "attack-pattern--b0caf548-cb26-573e-97e7-5855a65e445b",
+    "attack-pattern--c0bb8143-7361-5d66-92b9-eb2530d402ac",
+    "attack-pattern--d7f5ec6e-0492-55ec-a0dc-6d481a68b603",
+    "attack-pattern--ddbe5437-5957-5a36-aa4a-0ee725e05160",
+    "attack-pattern--e593b544-e68f-5823-8dac-01fca2ecf7a3",
+    "attack-pattern--ebcd2210-aac9-5413-9ee5-8f1ce9e9660f",
+    "intrusion-set--94505e97-ec1c-52b0-a974-8e644e308bec",
+    "intrusion-set--d1ee4d76-e478-5367-90f2-2c46002b35aa",
+    "intrusion-set--e86ea61c-ac0d-58f4-89dc-7b31e1e66af4",
+    "intrusion-set--e98025b2-42a7-58d1-9e3c-61fc211ce91b",
+    "intrusion-set--fab017fb-339d-5558-9cc0-c56bd2f7b152",
+    "malware--fded69f4-e1e7-5340-9d70-7d76a75a814d"
+   ],
+   "external_references": [
+    {
+     "source_name": "Google Threat Intelligence Group",
+     "url": "https://cloud.google.com/blog/topics/threat-intelligence/agentic-threat-activity-crosses-a-significant-threshold"
+    }
+   ],
+   "ai_cti_category": [
+    "A",
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-a",
+    "owasp-genai-category-b"
    ],
    "extensions": {
     "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
@@ -31952,6 +32866,47 @@
   {
    "type": "report",
    "spec_version": "2.1",
+   "id": "report--c63e2cb9-7e1a-594d-9049-931fefc4d465",
+   "created": "2026-11-01T00:00:00.000Z",
+   "modified": "2026-11-01T00:00:00.000Z",
+   "name": "Amazon Threat Intelligence – threat actors running cybercrime campaigns with ARTEX AI agents",
+   "published": "2026-11-01T00:00:00.000Z",
+   "created_by_ref": "identity--9a5896b7-4e0a-5eac-a7bf-f965756fa2f8",
+   "object_refs": [
+    "attack-pattern--2962f035-759d-5d5f-9ed8-590f143a28ba",
+    "attack-pattern--4261c65e-7b69-5e4b-a311-f91c43cdabba",
+    "attack-pattern--4902ab05-3a65-5a4c-b13c-b4dc7e68ae07",
+    "attack-pattern--81dab0da-3b91-576b-a330-f420e181cf9b",
+    "attack-pattern--863599a8-6d02-541e-a7b5-d2a2c11b6bbc",
+    "attack-pattern--8dbc0572-5bce-5be0-b904-f364fbcf1bcf",
+    "attack-pattern--a202c7f2-f85c-5e06-ab8f-f2ac9ef599cb",
+    "attack-pattern--b0caf548-cb26-573e-97e7-5855a65e445b",
+    "intrusion-set--665a3f50-494d-548d-957e-ea7a68b66242",
+    "intrusion-set--c16895f0-e11b-5233-b803-4c4151cac0c2"
+   ],
+   "external_references": [
+    {
+     "source_name": "Amazon",
+     "url": "https://aws.amazon.com/blogs/security/amazon-threat-intelligence-observes-threat-actors-running-cybercrime-campaigns-with-artex-ai-agents/"
+    }
+   ],
+   "ai_cti_category": [
+    "A",
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-a",
+    "owasp-genai-category-b"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "report",
+   "spec_version": "2.1",
    "id": "report--ca8cea41-f71c-5fe4-a02e-f335af644a2f",
    "created": "2026-09-01T00:00:00.000Z",
    "modified": "2026-09-01T00:00:00.000Z",
@@ -31973,6 +32928,40 @@
    ],
    "labels": [
     "owasp-genai-category-a"
+   ],
+   "extensions": {
+    "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
+     "extension_type": "toplevel-property-extension"
+    }
+   }
+  },
+  {
+   "type": "report",
+   "spec_version": "2.1",
+   "id": "report--cb18cb2b-3657-5bea-b69c-1f0bce4b463c",
+   "created": "2026-10-01T00:00:00.000Z",
+   "modified": "2026-10-01T00:00:00.000Z",
+   "name": "Pluto Security – Load/Mine Hugging Face malware campaign",
+   "published": "2026-10-01T00:00:00.000Z",
+   "created_by_ref": "identity--ca124142-2186-56ed-b5a3-86a8f6b0a73e",
+   "object_refs": [
+    "attack-pattern--19cb344c-c0b3-5b77-a530-2c92e85f9e11",
+    "attack-pattern--19d42dc6-549c-5670-8e39-6db3b198b834",
+    "attack-pattern--e82410b3-cb73-53a6-af23-324c5aaa9fad",
+    "attack-pattern--fb3a819f-f149-5ff4-afe0-d56cd6ea87d7",
+    "intrusion-set--1b4ddf93-d7c1-5354-8072-9d467c6c7470"
+   ],
+   "external_references": [
+    {
+     "source_name": "pluto.security",
+     "url": "https://pluto.security/blog/hugging-face-malware-campaign-load-mine/"
+    }
+   ],
+   "ai_cti_category": [
+    "B"
+   ],
+   "labels": [
+    "owasp-genai-category-b"
    ],
    "extensions": {
     "extension-definition--8c3aa43e-a379-598b-bac2-960894241d75": {
