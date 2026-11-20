@@ -1293,10 +1293,10 @@
    "table": "main",
    "name": "LEAKY CASTLE",
    "akas": "PRC contractor (GTIG)",
-   "brief": "GTIG reports a PRC contractor using LLMs to analyze, translate and interpret exfiltrated data, deriving organizational-structure insights that are added to finished intelligence reports sold to customers. *Analyst note: GTIG notes overlap with Wall Street Journal reporting; no MITRE IDs given (analyst-mapped). Vendor source.* GTIG",
+   "brief": "GTIG says LEAKY CASTLE, a PRC contractor, overlaps with public reporting about data leaked from a contractor that used LLMs to analyze, translate and understand exfiltrated data, deriving insights into organizational structures that were added to finished intelligence reports sold to customers. *Analyst note: the LLM use and the sale of reports come from that public reporting (Wall Street Journal), which GTIG cites as overlapping; GTIG does not independently confirm them and gives no dates for LEAKY CASTLE. No MITRE IDs given (analyst-mapped). Vendor source.* GTIG",
    "ttp_md": "**LLM-directed Automated Collection** T1119 - Automated Collection",
    "reported": "Nov 2026",
-   "activity": "Jul 2026 – Sep 2026"
+   "activity": "Unknown"
   },
   {
    "table": "deepfake",
@@ -1455,26 +1455,26 @@
    "table": "deepfake",
    "name": "ARTEX operators (Chinese-nexus groups, moderate confidence)",
    "akas": "",
-   "brief": "Amazon decoy telemetry showed ARTEX agents building a real-time deepfake video pipeline (open-source face-animation model, ~11.5 fps on a consumer GPU) to defeat selfie liveness checks and submitting forged ID images with fake camera metadata for document verification. *Analyst note: Amazon reports every recorded attempt was rejected by the vendor's server-side verdict; attempts, not confirmed account takeovers.* Amazon",
+   "brief": "Amazon decoy telemetry showed ARTEX agents building a real-time deepfake video pipeline (open-source face-animation model, ~11.5 fps on a consumer GPU) to defeat selfie liveness checks and submitting forged ID images with fake camera metadata for document verification. *Analyst note: Amazon reports the liveness vendor's server-side verdict rejected the deepfake in every attempt the agents recorded; it does not report document-check outcomes. Attempts, not confirmed account takeovers.* Amazon",
    "ttp_md": "**DeepFake for Impersonation** T1656 - Impersonation",
    "reported": "Nov 2026",
-   "activity": "Oct 2026 – Nov 2026"
+   "activity": "Oct 3 – Nov 5 2026"
   },
   {
    "table": "catB",
    "name": "UnSub (ARTEX agent campaigns stealing AI-platform credentials) — Amazon Threat Intelligence",
    "akas": "UnSub (\"disparate Chinese-nexus groups\", moderate confidence); same tool as other ARTEX rows, distinct campaign",
-   "brief": "Amazon's MadPot decoy network (mimicking LLM inference APIs) captured autonomous ARTEX agents sending their own operating records, showing planner/worker/verification agents sweeping internet-exposed AI gateways and app builders (One API, New API, LiteLLM, Dify, Langflow, RAGFlow, Open WebUI, Ollama and others) via default/missing admin credentials, unauthenticated management endpoints, known CVEs and SSRF-to-metadata, then harvesting, validating and pooling LLM provider API keys to fund further inference. *Analyst note: A+B (actor uses AI agents to attack AI platforms). Amazon \"did not observe that activity as it happened and cannot verify the outcomes the agents reported\". Skeptic gate (aws.amazon.com is untrusted-tier): PASS on primary read. ATLAS: no clean ID for credential theft from AI gateways, so AML.T0040 is the closest seed mapping and the rest is described in words (maintainer to check for a newer ATLAS technique).* Amazon",
-   "ttp_md": "**Credential theft from exposed AI gateways / app builders (LLM key harvesting)** AML.T0040 - AI Model Inference API Access (closest; flag for maintainer)<br><br>*ATT&CK (A side):* **LLM-orchestrated operations** TA0002 - Execution<br><br>T1190 - Exploit Public-Facing Application<br><br>T1552 - Unsecured Credentials",
+   "brief": "Amazon's MadPot decoy network (mimicking LLM inference APIs) captured autonomous ARTEX agents sending their own operating records, showing planner/worker/verification agents sweeping internet-exposed AI gateways and app builders (One API, New API, LiteLLM, Dify, Langflow, RAGFlow, Open WebUI, Ollama and others) via default/missing admin credentials, unauthenticated management endpoints, known CVEs and SSRF-to-metadata, then harvesting, validating and pooling LLM provider API keys to fund further inference. *Analyst note: A+B (actor uses AI agents to attack AI platforms). Amazon \"did not observe that activity as it happened and cannot verify the outcomes the agents reported\". Skeptic gate (aws.amazon.com is untrusted-tier): PASS on primary read. ATLAS IDs checked against ATLAS 5.6.0.* Amazon",
+   "ttp_md": "**Credential theft from exposed AI gateways / app builders (LLM key harvesting)** AML.T0049 - Exploit Public-Facing Application<br><br>AML.T0055 - Unsecured Credentials<br><br>AML.T0040 - AI Model Inference API Access<br><br>*ATT&CK (A side):* **LLM-orchestrated operations** TA0002 - Execution<br><br>T1190 - Exploit Public-Facing Application<br><br>T1552 - Unsecured Credentials",
    "reported": "Nov 2026",
-   "activity": "Oct 2026 – Nov 2026"
+   "activity": "Oct 3 – Nov 5 2026"
   },
   {
    "table": "catB",
    "name": "Financially motivated LLMjacking crews — GTIG/Mandiant",
    "akas": "UnSub (no designation)",
-   "brief": "GTIG and Mandiant report intrusions throughout 2026 against financial-services, retail, transportation and technology organizations in North America, South America and Asia-Pacific in which actors stole cloud/AI service credentials (from public GitHub repositories and phished session tokens), exploited CVE-2026-40217 (a LiteLLM sandbox escape elevating limited virtual keys to admin), used a \"burn and rotate\" service-account pattern to evade rate limits, and ran millions of LLM API calls in ~24 hours; victim losses exceeded $100,000 in a day and reached $1M cumulatively in the worst cases. *Analyst note: Vendor source; ATLAS ID is a closest-seed mapping, flag for maintainer.* GTIG",
-   "ttp_md": "**LLMjacking (stolen AI-service credentials / key abuse)** AML.T0040 - AI Model Inference API Access (closest; flag for maintainer)<br><br>AML.T0048.000 - External Harms: Financial",
+   "brief": "GTIG and Mandiant report intrusions throughout 2026 against financial-services, retail, transportation and technology organizations in North America, South America and Asia-Pacific in which actors stole cloud/AI service credentials (from public GitHub repositories and phished session tokens), exploited CVE-2026-40217 (a LiteLLM sandbox escape elevating limited virtual keys to admin), used a \"burn and rotate\" service-account pattern to evade rate limits, and ran millions of LLM API calls in ~24 hours; victim losses exceeded $100,000 in a day and reached $1M cumulatively in the worst cases. *Analyst note: Vendor source; GTIG dates the incidents only as \"throughout 2026\". ATLAS IDs checked against ATLAS 5.6.0.* GTIG",
+   "ttp_md": "**LLMjacking (stolen AI-service credentials / key abuse)** AML.T0055 - Unsecured Credentials<br><br>AML.T0040 - AI Model Inference API Access<br><br>AML.T0048.000 - External Harms: Financial Harm",
    "reported": "Nov 2026",
    "activity": "Jan 2026 – Nov 2026"
   },
@@ -1482,8 +1482,8 @@
    "table": "catB",
    "name": "UnSub (Load/Mine Hugging Face model-repository campaign) — Pluto Security",
    "akas": "UnSub; assessed financially motivated, Chinese-speaking operator or small group (Pluto: an assessment, not confirmed attribution)",
-   "brief": "Pluto Security found 31 malicious model repositories across seven Hugging Face/ModelScope accounts (first wave of 12 removed; a second wave of 19 appeared after disclosure) whose Python code runs on load when `trust_remote_code=True`, before any weights are used, installing watchdog/shell-profile persistence, SSH-key or reverse-shell backdoors, a fileless peakminer cryptominer disguised as a kernel worker, and a container-escape attempt; targets were self-hosted inference platforms (Xinference, GPUStack), rented GPU machines and notebooks. First-wave wallet received ~2,276 PRL (~$5,000) across 716 transactions; ~29.8k campaign downloads (downloads are not confirmed infections). *Analyst note: untrusted-tier vendor source, read at primary; real adversary operation with on-chain payout evidence.* Pluto Security",
-   "ttp_md": "**Malicious model repositories (trust_remote_code backdoor / cryptominer)** AML.T0010.003 - AI Supply Chain Compromise: Model<br><br>AML.T0018 - Manipulate AI Model: Backdoor/payload (closest; verify)<br><br>T1496 - Resource Hijacking (ATT&CK)",
+   "brief": "Pluto Security tracked 31 malicious Hugging Face model repositories across seven accounts (a first wave of 12, then a second wave of 19 across five accounts that followed within days of the takedown; a separate ModelScope account is listed outside that count) whose Python code runs on load when `trust_remote_code=True`, before any weights are used, installing watchdog/shell-profile persistence, SSH-key or reverse-shell backdoors, a fileless peakminer cryptominer disguised as a kernel worker, and a container-to-host escape script (success not confirmed); targets were self-hosted inference platforms (Xinference, GPUStack), rented GPU machines and notebooks. The first-wave wallet had received about 2,276 PRL across 716 transactions (Pluto's summary puts this near $5,000); 29,818 recorded downloads across the 31 repositories (downloads are not confirmed infections). *Analyst note: untrusted-tier vendor source, read at primary; real adversary operation with on-chain payout evidence.* Pluto Security",
+   "ttp_md": "**Malicious model repositories (trust_remote_code backdoor / cryptominer)** AML.T0010.003 - AI Supply Chain Compromise: Model<br><br>AML.T0011.000 - User Execution: Unsafe AI Artifacts<br><br>T1496 - Resource Hijacking (ATT&CK)",
    "reported": "Oct 2026",
    "activity": "Sep 2026 – Oct 2026"
   },
@@ -1491,8 +1491,8 @@
    "table": "catB",
    "name": "UnSub (Fireworks AI → Cursor marketplace trojanized Claude Code extension) — Cursor",
    "akas": "UnSub (no attribution by Cursor)",
-   "brief": "Cursor disclosed that an attacker used an access key Cursor had issued to inference provider Fireworks AI (exposed in a Fireworks compromise) to copy a read-only bucket of coding-agent session traces, harvested unredacted credentials from them to reach Cursor SaaS tools and non-production source repositories, and on 29 Oct 2026 planted trojanized copies of Anthropic's Claude Code extension (v2.1.312 and 2.1.313) in the cache serving Cursor's VS Code marketplace for ~11 hours; at most ~5,000 users could have received them; last attacker activity 1 Nov (blocked). Cursor states Anthropic did not publish the copies and Open VSX never carried them. *Analyst note: victim-disclosed incident report; actor unattributed. Skeptic gate (cursor.com untrusted-tier): PASS on primary read.* Cursor",
-   "ttp_md": "**AI developer-tool / AI-provider supply-chain compromise** AML.T0010 - AI Supply Chain Compromise<br><br>T1195.002 - Compromise Software Supply Chain (ATT&CK)",
+   "brief": "Cursor disclosed that an attacker obtained an access key Cursor had issued to Fireworks (exposed by Fireworks) and used it to copy data from a read-only storage bucket shared with them, holding coding-agent session traces, harvested credentials that had not been redacted from them to reach select Cursor SaaS tools and archived non-production source repositories, and on 29 Oct 2026 planted trojanized copies of Anthropic's Claude Code extension (v2.1.312 and 2.1.313) in the cache serving Cursor's VS Code marketplace for ~11 hours; at most ~5,000 users could have received them; last attacker activity 1 Nov (blocked). Cursor states Anthropic did not publish the copies and Open VSX never carried them. *Analyst note: victim-disclosed incident report; actor unattributed. Skeptic gate (cursor.com untrusted-tier): PASS on primary read.* Cursor",
+   "ttp_md": "**AI developer-tool / AI-provider supply-chain compromise** AML.T0010.001 - AI Supply Chain Compromise: AI Software<br><br>T1195.002 - Compromise Software Supply Chain (ATT&CK)",
    "reported": "Nov 2026",
    "activity": "Oct 2026 – Nov 2026"
   }
