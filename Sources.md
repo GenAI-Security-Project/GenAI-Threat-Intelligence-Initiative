@@ -84,6 +84,9 @@ This is *not* for:
 |November | Amazon Threat Intelligence | [Amazon Threat Intelligence observes threat actors running cybercrime campaigns with ARTEX AI agents](https://aws.amazon.com/blogs/security/amazon-threat-intelligence-observes-threat-actors-running-cybercrime-campaigns-with-artex-ai-agents/) |
 |November | Cursor | [An update on our recent security incident](https://cursor.com/blog/security-incident-update) |
 |October | Pluto Security | [Hugging Face malware campaign: Load/Mine](https://pluto.security/blog/hugging-face-malware-campaign-load-mine/) |
+|August | Snyk | [Inside the keyv npm Compromise: preinstall Malware, Trusted Provenance, and IDE Hooks](https://snyk.io/blog/inside-keyv-npm-compromise-preinstall-malware-trusted-provenance-ide-hooks/) |
+|August | Socket | [Popular npm packages in the keyv and cacheable namespaces compromised in active supply chain attack](https://socket.dev/blog/popular-npm-packages-in-the-keyv-and-cacheable-namespaces-compromised-in-active-supply-chain) |
+|September | Huntress | [Attackers Abuse ChatGPT Custom GPTs to Deliver RAT via ClickFix](https://www.huntress.com/blog/chatgpt-custom-gpts-clickfix-rat) |
 
 
 ## 2025 Reports
